@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Course
+from .models import (Course, Enquiry, Branch, EnvironmentImage,
+                    FAQ, Enrollment, StudentProject,StudentStory,)
 from django.utils.html import format_html
 
 # Register your models here.
@@ -28,6 +29,8 @@ class CourseAdmin(admin.ModelAdmin):
                 'thumbnail_preview',
                 'coursename',
                 'level',
+                'is_featured',
+                'short_description',
                 'detailtitle',
                 'subtitle_1',
                 'subtitle_2',
@@ -62,3 +65,28 @@ class CourseAdmin(admin.ModelAdmin):
         return "No Image"
 
     thumbnail_preview.short_description = "Thumbnail Preview"
+
+
+
+
+admin.site.register(Enrollment)
+admin.site.register(Enquiry)
+
+class BranchAdmin(admin.ModelAdmin):
+    list_display = ('name', 'latitude', 'longitude', 'has_coordinates')
+    def has_coordinates(self, obj):
+        return bool(obj.latitude and obj.longitude)
+    has_coordinates.boolean = True
+
+admin.site.register(Branch,BranchAdmin)
+admin.site.register(EnvironmentImage)
+admin.site.register(FAQ)
+
+admin.site.register(StudentProject)
+
+
+class StudentStoryAdmin(admin.ModelAdmin):
+    list_display = ('student_name', 'course_or_role', 'order')
+    list_editable = ('order',)
+
+admin.site.register(StudentStory, StudentStoryAdmin)

@@ -2,6 +2,399 @@
 {% load static %}
 
 {% block content %}
+<div class="bg-white font-sans overflow-x-hidden">
 
-<h1>about</h1>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <div class="text-center mb-16">
+            <h1 class="text-xl font-semibold text-black mb-3">About VTS</h1>
+            <p class="text-gray-700 text-[15px] md:text-base font-medium">
+                Empowering the next generation of IT Professionals with foundational knowledge and industry - ready skills
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row items-center gap-12 lg:px-20">
+            <div class="w-full lg:w-1/2">
+                <h2 class="text-xl font-semibold text-black mb-6">Our Story</h2>
+                <div class="space-y-6 text-[15px] text-gray-800 leading-relaxed font-medium">
+                    <p>
+                        VTS was founded with a simple observation — many learners struggle to enter the IT industry not due to lack of talent, but because they lack practical exposure, confidence, and guided direction.
+                    </p>
+                    <p>
+                        We built Vetri Technology Solutions to bridge this gap through structured training, real-time collaboration, and a strong learning ecosystem.
+                    </p>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 flex justify-center">
+                <img src="{% static 'images/aboutimage1.png' %}" alt="Team Collaboration" class="w-full max-w-lg object-contain">
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 px-4 lg:px-12">
+            
+            <div class="relative w-full flex flex-col items-center">
+                <div class="relative z-10 bg-white w-full rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border-b-8 border-[#6C2CB1] p-10 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <img src="{% static 'images/aboutimage2.jpg' %}" alt="Mission" class="w-14 h-14 object-contain">
+                    </div>
+                    <h3 class="text-xl font-extrabold text-black mb-4">Mission</h3>
+                    <p class="text-sm text-gray-700 font-medium leading-relaxed">
+                        To provide IT training that helps learners develop technical skills, confidence, and readiness for real-world career opportunities.
+                    </p>
+                </div>
+                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#6C2CB1] rotate-45 z-0 rounded-sm"></div>
+            </div>
+
+            <div class="relative w-full flex flex-col items-center mt-10 md:mt-0">
+                <div class="relative z-10 bg-white w-full rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border-b-8 border-[#6C2CB1] p-10 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <img src="{% static 'images/aboutimage3.png' %}" alt="Vision" class="w-14 h-14 object-contain">
+                    </div>
+                    <h3 class="text-xl font-extrabold text-black mb-4">Vision</h3>
+                    <p class="text-sm text-gray-700 font-medium leading-relaxed">
+                        To create a learning platform that supports students and beginners in building strong IT knowledge and growing towards successful professional careers.
+                    </p>
+                </div>
+                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#6C2CB1] rotate-45 z-0 rounded-sm"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 overflow-hidden">
+        <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-8 relative">
+            
+            <div class="w-full lg:w-5/12 relative flex items-center justify-center lg:justify-end z-10">
+                <img src="{% static 'images/student_3d_books.png' %}" alt="Student" class="w-48 sm:w-64 absolute left-0 lg:-left-12 bottom-0 z-20 drop-shadow-2xl">
+                
+                <div class="w-64 h-64 sm:w-72 sm:h-72 bg-white rounded-full flex flex-col items-center justify-center shadow-[0_15px_50px_-15px_rgba(0,0,0,0.2)] border-r-[16px] border-[#6C2CB1] z-10 pl-16">
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-black leading-tight">The Complete VTS<br>Ecosystem</h2>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-7/12 flex flex-col gap-8 lg:pl-16 relative z-10">
+                
+                <div class="relative w-full max-w-xl group">
+                    <div class="absolute inset-0 bg-[#FF9C00] rounded-full translate-x-3 translate-y-3 rounded-bl-none transition-transform group-hover:translate-x-4 group-hover:translate-y-4"></div>
+                    <div class="relative bg-white border border-gray-100 rounded-full shadow-md flex items-center py-4 px-6 sm:px-8">
+                        <div class="absolute -left-6 sm:-left-8 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full border border-gray-100 shadow-sm flex items-center justify-center p-2">
+                            <img src="{% static 'images/VTS_logo.jpg' %}" alt="VTS" class="w-full h-full object-contain">
+                        </div>
+                        <div class="ml-10 sm:ml-16 flex-1">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-extrabold text-black text-[15px] sm:text-[17px]">Vetri Technology Solution (VTS)</h4>
+                                <a href="#" class="text-[#6C2CB1] text-xs font-bold flex items-center hover:underline">Site <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[12px] sm:text-[13px] text-gray-800 font-medium flex items-center"><span class="text-[#FF9C00] mr-2 text-lg">✓</span> Provides IT training programs</p>
+                                <p class="text-[12px] sm:text-[13px] text-gray-800 font-medium flex items-center"><span class="text-[#FF9C00] mr-2 text-lg">✓</span> Focus on practical skill development</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full max-w-xl group">
+                    <div class="absolute inset-0 bg-[#FF9C00] rounded-full translate-x-3 translate-y-3 rounded-bl-none transition-transform group-hover:translate-x-4 group-hover:translate-y-4"></div>
+                    <div class="relative bg-white border border-gray-100 rounded-full shadow-md flex items-center py-4 px-6 sm:px-8">
+                        <div class="absolute -left-6 sm:-left-8 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full border border-gray-100 shadow-sm flex items-center justify-center p-3">
+                            <img src="{% static 'images/VIS_logo.png' %}" alt="VIS" class="w-full h-full object-contain">
+                        </div>
+                        <div class="ml-10 sm:ml-16 flex-1">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-extrabold text-black text-[15px] sm:text-[17px]">Vetri IT System (VIS)</h4>
+                                <a href="#" class="text-[#6C2CB1] text-xs font-bold flex items-center hover:underline">Site <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[12px] sm:text-[13px] text-gray-800 font-medium flex items-center"><span class="text-[#FF9C00] mr-2 text-lg">✓</span> Provide internship opportunities</p>
+                                <p class="text-[12px] sm:text-[13px] text-gray-800 font-medium flex items-center"><span class="text-[#FF9C00] mr-2 text-lg">✓</span> Real industry exposure</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full max-w-xl group">
+                    <div class="absolute inset-0 bg-[#FF9C00] rounded-full translate-x-3 translate-y-3 rounded-bl-none transition-transform group-hover:translate-x-4 group-hover:translate-y-4"></div>
+                    <div class="relative bg-white border border-gray-100 rounded-full shadow-md flex items-center py-4 px-6 sm:px-8">
+                        <div class="absolute -left-6 sm:-left-8 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full border border-gray-100 shadow-sm flex items-center justify-center p-3">
+                            <img src="{% static 'images/VCS_logo.png' %}" alt="VCS" class="w-full h-full object-contain">
+                        </div>
+                        <div class="ml-10 sm:ml-16 flex-1">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-extrabold text-black text-[15px] sm:text-[17px]">Vetri Consultancy Services (VCS)</h4>
+                                <a href="#" class="text-[#6C2CB1] text-xs font-bold flex items-center hover:underline">Site <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[12px] sm:text-[13px] text-gray-800 font-medium flex items-center"><span class="text-[#FF9C00] mr-2 text-lg">✓</span> Provide career guidance</p>
+                                <p class="text-[12px] sm:text-[13px] text-gray-800 font-medium flex items-center"><span class="text-[#FF9C00] mr-2 text-lg">✓</span> Support job-related consultation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-center text-black mb-12">Our Value-Driven Training Approach</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <div class="bg-white rounded-xl shadow-[0_5px_20px_rgba(0,0,0,0.08)] border border-gray-100 border-l-[10px] border-l-[#6C2CB1] p-8 md:p-10">
+                <p class="text-[15px] text-gray-800 leading-relaxed font-semibold tracking-wide">
+                    At VTS, we believe quality education should be accessible without compromise. Our programs are thoughtfully structured to support learners from diverse backgrounds, including those with career gaps. We focus on skills, growth, and readiness — not on past timelines.
+                </p>
+            </div>
+            <div class="bg-white rounded-xl shadow-[0_5px_20px_rgba(0,0,0,0.08)] border border-gray-100 border-l-[10px] border-l-[#6C2CB1] p-8 md:p-10">
+                <p class="text-[15px] text-gray-800 leading-relaxed font-semibold tracking-wide">
+                    Our training fees remain affordable because we operate as part of a strong ecosystem, not as a standalone institute. We never compromise on quality, mentorship, or learning outcomes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FAFAFA]">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-center text-black mb-16">How we Shape Your Skills</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+            
+            <div class="relative w-full transform hover:-translate-y-2 transition-transform duration-300">
+                <div class="bg-gradient-to-b from-white to-gray-50 rounded-lg shadow-lg border border-gray-100 p-8 pt-12 text-center relative z-10 h-full">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center text-[#1b75f3]">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    </div>
+                    <h3 class="text-[17px] font-extrabold text-black mb-6">About the Training Platform</h3>
+                    <ul class="text-left space-y-4">
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Student - focused IT training</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Practical skill development</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Structured learning support</li>
+                    </ul>
+                </div>
+                <div class="absolute -bottom-6 left-0 right-0 h-10 bg-[#592393] z-0 rounded-b-xl border-t-[15px] border-[#6C2CB1] scale-105"></div>
+            </div>
+
+            <div class="relative w-full transform hover:-translate-y-2 transition-transform duration-300 mt-10 md:mt-0">
+                <div class="bg-gradient-to-b from-white to-gray-50 rounded-lg shadow-lg border border-gray-100 p-8 pt-12 text-center relative z-10 h-full">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center text-[#1b75f3]">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/></svg>
+                    </div>
+                    <h3 class="text-[17px] font-extrabold text-black mb-6">Our Learning Approach</h3>
+                    <ul class="text-left space-y-4">
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Step-by-step teaching</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Hand-on practice</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Daily Task</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Projects</li>
+                    </ul>
+                </div>
+                <div class="absolute -bottom-6 left-0 right-0 h-10 bg-[#592393] z-0 rounded-b-xl border-t-[15px] border-[#6C2CB1] scale-105"></div>
+            </div>
+
+            <div class="relative w-full transform hover:-translate-y-2 transition-transform duration-300 mt-10 md:mt-0">
+                <div class="bg-gradient-to-b from-white to-gray-50 rounded-lg shadow-lg border border-gray-100 p-8 pt-12 text-center relative z-10 h-full">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center text-[#1b75f3]">
+                        <svg class="w-14 h-14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 6H5V5h14v4zM19 13H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2zm0 6H5v-4h14v4z"/></svg>
+                    </div>
+                    <h3 class="text-[17px] font-extrabold text-black mb-6">Industry Connection</h3>
+                    <ul class="text-left space-y-4">
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Linked with real IT startup</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Awareness of industry practices</li>
+                        <li class="flex items-start text-[14px] text-gray-800 font-semibold tracking-tight"><div class="w-5 h-5 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white mr-3 mt-0.5 flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div> Career-oriented learning</li>
+                    </ul>
+                </div>
+                <div class="absolute -bottom-6 left-0 right-0 h-10 bg-[#592393] z-0 rounded-b-xl border-t-[15px] border-[#6C2CB1] scale-105"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-center text-black mb-16">Your Training Journey</h2>
+        
+        <div class="hidden md:flex flex-col items-center justify-center">
+            <div class="flex justify-between items-start w-full max-w-5xl mb-4">
+                <div class="text-center w-64">
+                    <img src="{% static 'images/aboutimage4.png' %}" alt="Entry" class="h-20 mx-auto mb-4">
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">Entry & Counseling</h4>
+                    <p class="text-sm font-medium text-gray-700">Get guidance to choose the right career.</p>
+                </div>
+                <div class="flex-1 flex items-center justify-center pt-8">
+                    <div class="w-full max-w-[120px] border-t-2 border-dashed border-gray-600 relative"><div class="absolute -right-2 -top-2 text-gray-600">➔</div></div>
+                </div>
+                <div class="text-center w-64">
+                    <img src="{% static 'images/aboutimage5.webp' %}" alt="Joining" class="h-20 mx-auto mb-4">
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">Joining</h4>
+                    <p class="text-sm font-medium text-gray-700">Enroll and receive course access and schedule.</p>
+                </div>
+                <div class="flex-1 flex items-center justify-center pt-8">
+                    <div class="w-full max-w-[120px] border-t-2 border-dashed border-gray-600 relative"><div class="absolute -right-2 -top-2 text-gray-600">➔</div></div>
+                </div>
+                <div class="text-center w-64">
+                    <img src="{% static 'images/aboutimage6.png' %}" alt="Training Phase" class="h-20 mx-auto mb-4">
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">Training Phase</h4>
+                    <p class="text-sm font-medium text-gray-700">Learn through practical sessions and real projects.</p>
+                </div>
+            </div>
+
+            <div class="w-full max-w-5xl flex justify-end pr-[110px] mb-4">
+                <div class="h-16 border-l-2 border-dashed border-gray-600 relative"><div class="absolute -bottom-3 -left-2.5 text-gray-600 rotate-90">➔</div></div>
+            </div>
+
+            <div class="flex flex-row-reverse justify-between items-start w-full max-w-5xl">
+                <div class="text-center w-64">
+                    <img src="{% static 'images/aboutimage7.png' %}" alt="Completion" class="h-20 mx-auto mb-4">
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">Completion & Certification</h4>
+                    <p class="text-sm font-medium text-gray-700">Finish the course and earn your certificate.</p>
+                </div>
+                <div class="flex-1 flex items-center justify-center pt-8">
+                    <div class="w-full max-w-[120px] border-t-2 border-dashed border-gray-600 relative"><div class="absolute -left-2 -top-2 text-gray-600 rotate-180">➔</div></div>
+                </div>
+                <div class="text-center w-64">
+                    <img src="{% static 'images/aboutimage8.avif' %}" alt="Best Performer" class="h-20 mx-auto mb-4">
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">Best Performer Opportunity</h4>
+                    <p class="text-sm font-medium text-gray-700">Top performers get hands-on internship experience.</p>
+                </div>
+                <div class="flex-1 flex items-center justify-center pt-8">
+                    <div class="w-full max-w-[120px] border-t-2 border-dashed border-gray-600 relative"><div class="absolute -left-2 -top-2 text-gray-600 rotate-180">➔</div></div>
+                </div>
+                <div class="text-center w-64">
+                    <img src="{% static 'images/aboutimage9.webp' %}" alt="Job Opportunity" class="h-20 mx-auto mb-4">
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">Job Opportunity</h4>
+                    <p class="text-sm font-medium text-gray-700">Outstanding students may receive job opportunities.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:hidden flex flex-col items-center gap-10">
+            <div class="text-center"><img src="{% static 'images/icon_entry.png' %}" alt="Entry" class="h-16 mx-auto mb-3"><h4 class="font-extrabold text-[17px]">Entry & Counseling</h4></div>
+            <div class="text-gray-600 rotate-90">➔</div>
+            <div class="text-center"><img src="{% static 'images/icon_joining.png' %}" alt="Joining" class="h-16 mx-auto mb-3"><h4 class="font-extrabold text-[17px]">Joining</h4></div>
+            <div class="text-gray-600 rotate-90">➔</div>
+            <div class="text-center"><img src="{% static 'images/icon_training.png' %}" alt="Training Phase" class="h-16 mx-auto mb-3"><h4 class="font-extrabold text-[17px]">Training Phase</h4></div>
+            <div class="text-gray-600 rotate-90">➔</div>
+            <div class="text-center"><img src="{% static 'images/icon_completion.png' %}" alt="Completion" class="h-16 mx-auto mb-3"><h4 class="font-extrabold text-[17px]">Completion & Certification</h4></div>
+            <div class="text-gray-600 rotate-90">➔</div>
+            <div class="text-center"><img src="{% static 'images/icon_medal.png' %}" alt="Best Performer" class="h-16 mx-auto mb-3"><h4 class="font-extrabold text-[17px]">Best Performer Opportunity</h4></div>
+            <div class="text-gray-600 rotate-90">➔</div>
+            <div class="text-center"><img src="{% static 'images/icon_job.png' %}" alt="Job Opportunity" class="h-16 mx-auto mb-3"><h4 class="font-extrabold text-[17px]">Job Opportunity</h4></div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-center text-black mb-16">Who Can Join</h2>
+        
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-16 lg:gap-x-12 px-4 md:px-12">
+            
+            <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center">
+                <div class="absolute -left-6 sm:-left-10 z-20 w-24 h-24 sm:w-[110px] sm:h-[110px] bg-[#FF9C00] flex items-center justify-center p-1.5" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                    <div class="w-full h-full bg-white flex items-center justify-center overflow-hidden" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                        <img src="{% static 'images/who_students.png' %}" alt="Students" class="w-full h-full object-cover bg-blue-50">
+                    </div>
+                </div>
+                <div class="bg-white rounded-full shadow-md border border-gray-100 py-5 sm:py-6 pl-24 sm:pl-28 pr-6 w-full relative z-10 border-r-4 border-r-[#FF9C00]">
+                    <h4 class="font-bold text-gray-900 text-[15px] sm:text-[17px]">Students</h4>
+                </div>
+            </div>
+
+            <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center">
+                <div class="absolute -left-6 sm:-left-10 z-20 w-24 h-24 sm:w-[110px] sm:h-[110px] bg-[#6C2CB1] flex items-center justify-center p-1.5" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                    <div class="w-full h-full bg-white flex items-center justify-center overflow-hidden" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                        <img src="{% static 'images/who_freshers.png' %}" alt="Fresher Graduates" class="w-full h-full object-cover bg-purple-50">
+                    </div>
+                </div>
+                <div class="bg-white rounded-full shadow-md border border-gray-100 py-5 sm:py-6 pl-24 sm:pl-28 pr-6 w-full relative z-10 border-r-4 border-r-[#6C2CB1]">
+                    <h4 class="font-bold text-gray-900 text-[15px] sm:text-[17px]">Fresher Graduates</h4>
+                </div>
+            </div>
+
+            <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center">
+                <div class="absolute -left-6 sm:-left-10 z-20 w-24 h-24 sm:w-[110px] sm:h-[110px] bg-[#6C2CB1] flex items-center justify-center p-1.5" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                    <div class="w-full h-full bg-white flex items-center justify-center overflow-hidden" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                        <img src="{% static 'images/who_working.png' %}" alt="Working Professionals" class="w-full h-full object-cover bg-purple-50">
+                    </div>
+                </div>
+                <div class="bg-white rounded-full shadow-md border border-gray-100 py-5 sm:py-6 pl-24 sm:pl-28 pr-6 w-full relative z-10 border-r-4 border-r-[#6C2CB1]">
+                    <h4 class="font-bold text-gray-900 text-[15px] sm:text-[17px]">Working Professionals</h4>
+                </div>
+            </div>
+
+            <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center">
+                <div class="absolute -left-6 sm:-left-10 z-20 w-24 h-24 sm:w-[110px] sm:h-[110px] bg-[#FF9C00] flex items-center justify-center p-1.5" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                    <div class="w-full h-full bg-white flex items-center justify-center overflow-hidden" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                        <img src="{% static 'images/who_break.png' %}" alt="Career Break Learners" class="w-full h-full object-cover bg-orange-50">
+                    </div>
+                </div>
+                <div class="bg-white rounded-full shadow-md border border-gray-100 py-5 sm:py-6 pl-24 sm:pl-28 pr-6 w-full relative z-10 border-r-4 border-r-[#FF9C00]">
+                    <h4 class="font-bold text-gray-900 text-[15px] sm:text-[17px]">Career Break Learners</h4>
+                </div>
+            </div>
+
+            <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center lg:col-start-2">
+                <div class="absolute -left-6 sm:-left-10 z-20 w-24 h-24 sm:w-[110px] sm:h-[110px] bg-[#6C2CB1] flex items-center justify-center p-1.5" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                    <div class="w-full h-full bg-white flex items-center justify-center overflow-hidden" style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);">
+                        <img src="{% static 'images/who_switchers.png' %}" alt="Career Switchers" class="w-full h-full object-cover bg-purple-50">
+                    </div>
+                </div>
+                <div class="bg-white rounded-full shadow-md border border-gray-100 py-5 sm:py-6 pl-24 sm:pl-28 pr-6 w-full relative z-10 border-r-4 border-r-[#6C2CB1]">
+                    <h4 class="font-bold text-gray-900 text-[15px] sm:text-[17px]">Career Switchers</h4>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="w-full bg-[#1b75f3] py-16 text-white text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-10">Our Impact</h2>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-blue-400/50">
+            <div class="pt-4 md:pt-0">
+                <span class="block text-4xl md:text-[42px] font-extrabold tracking-tight mb-2">8+</span>
+                <span class="block text-sm md:text-[15px] font-medium text-blue-100">Years of Excellence</span>
+            </div>
+            <div class="pt-4 md:pt-0">
+                <span class="block text-4xl md:text-[42px] font-extrabold tracking-tight mb-2">5000+</span>
+                <span class="block text-sm md:text-[15px] font-medium text-blue-100">Students Trained</span>
+            </div>
+            <div class="pt-4 md:pt-0">
+                <span class="block text-4xl md:text-[42px] font-extrabold tracking-tight mb-2">85%</span>
+                <span class="block text-sm md:text-[15px] font-medium text-blue-100">Placement Rate</span>
+            </div>
+            <div class="pt-4 md:pt-0">
+                <span class="block text-4xl md:text-[42px] font-extrabold tracking-tight mb-2">4.8/5</span>
+                <span class="block text-sm md:text-[15px] font-medium text-blue-100">Student Satisfaction</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-12">
+        <div class="relative bg-[#6C2CB1] rounded-2xl overflow-hidden py-12 px-6 sm:px-12 flex flex-col md:flex-row items-center justify-between shadow-2xl">
+            
+            <div class="absolute inset-0 pointer-events-none -z-0">
+                <div class="absolute top-4 left-1/4 w-12 h-12 bg-white/10 rounded-full"></div>
+                <div class="absolute bottom-1/4 left-1/3 w-24 h-24 bg-white/10 rounded-full"></div>
+                <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-white/10 rounded-full"></div>
+                <div class="absolute -top-10 right-10 w-48 h-48 bg-white/10 rounded-full"></div>
+                <div class="absolute -bottom-8 right-1/2 w-20 h-20 bg-white/10 rounded-full"></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 lg:gap-8 relative z-10 w-full md:w-3/4">
+                <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-white rounded-full overflow-hidden border-4 border-white shadow-lg">
+                    <img src="{% static 'images/profile_woman.jpg' %}" alt="Career Guide" class="w-full h-full object-cover">
+                </div>
+                <div class="pt-2">
+                    <h2 class="text-2xl sm:text-[28px] font-extrabold text-white mb-3">Ready to Start Your Career</h2>
+                    <p class="text-gray-100 text-[15px] font-medium leading-relaxed max-w-xl">
+                        Direct placement support and interview opportunities at out integrated IT startup ecosystem. Start your career with confidence !.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-8 md:mt-0 relative z-10">
+                <a href="#" class="inline-block bg-white border border-[#FF9C00] text-gray-900 font-extrabold text-[15px] py-3.5 px-8 rounded-md shadow-lg hover:bg-gray-50 transition-colors whitespace-nowrap">
+                    Get Free Consultation Now
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
 {% endblock %}

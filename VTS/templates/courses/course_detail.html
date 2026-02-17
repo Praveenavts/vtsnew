@@ -324,11 +324,38 @@
                     </div>
                 </div>
 
+                <div id="step4Content" class="hidden flex flex-col items-center justify-center animate-fade-in-up py-4">
+                    
+                    <div class="w-20 h-20 bg-[#4CAF50] rounded-full flex items-center justify-center mb-6 shadow-md">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-black mb-8">Payment Completed</h2>
+
+                    <div class="bg-[#E8F5E9] rounded-2xl p-8 w-full max-w-lg mb-8 shadow-sm">
+                        <h3 class="text-xl font-extrabold text-black mb-6 text-center">Transaction Details</h3>
+                        
+                        <div class="space-y-4 text-[15px] font-semibold text-gray-800">
+                            <div class="flex justify-between"><span class="w-1/2">Transaction Id</span><span class="w-1/2 font-normal">: <span id="succ_txn"></span></span></div>
+                            <div class="flex justify-between"><span class="w-1/2">Date</span><span class="w-1/2 font-normal">: <span id="succ_date"></span></span></div>
+                            <div class="flex justify-between"><span class="w-1/2">Payment Method</span><span class="w-1/2 font-normal">: <span id="succ_method"></span></span></div>
+                            <div class="flex justify-between"><span class="w-1/2">Amount Paid</span><span class="w-1/2 font-normal">: ₹ <span id="succ_amount"></span></span></div>
+                            <div class="flex justify-between"><span class="w-1/2">Email Id</span><span class="w-1/2 font-normal">: <span id="succ_email"></span></span></div>
+                        </div>
+                    </div>
+
+                    <button id="btn-download-invoice" class="bg-[#FF9C00] hover:bg-[#e68a00] text-white font-extrabold py-3.5 px-10 rounded-md shadow-md transition-colors text-[16px]">
+                        Download Invoice
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
 
 </div>
+
+<!-- The HTML remains unchanged; only the <script> section is updated below -->
 
 <script>
     let razorpayOptions = null;
@@ -344,38 +371,29 @@
     }
 
     function goToStep(step) {
-        const form = document.getElementById('enrollForm');
-        const step2 = document.getElementById('step2Content');
-        const step3 = document.getElementById('step3Content');
+        document.getElementById('enrollForm').classList.add('hidden');
+        document.getElementById('step2Content').classList.add('hidden');
+        document.getElementById('step3Content').classList.add('hidden');
+        document.getElementById('step4Content').classList.add('hidden');
         
-        const ind1 = document.getElementById('step1-indicator').querySelector('div');
-        const ind2 = document.getElementById('step2-indicator').querySelector('div');
-        const ind3 = document.getElementById('step3-indicator').querySelector('div');
-        
-        const check1 = document.getElementById('step1-check');
-        const check2 = document.getElementById('step2-check');
-        const progressLine = document.getElementById('progress-line');
-
-        form.classList.add('hidden');
-        step2.classList.add('hidden');
-        step3.classList.add('hidden');
-
         const activeClass = ['bg-[#FF9C00]', 'text-white'];
         const inactiveClass = ['bg-gray-200', 'text-gray-600'];
         const completedClass = ['bg-[#22c55e]', 'text-white'];
 
         if(step === 1) {
-            form.classList.remove('hidden');
-            ind1.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
-            ind2.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
-            ind3.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
-            check1.classList.add('hidden');
-            check2.classList.add('hidden');
-            progressLine.style.width = '0%';
+            document.getElementById('enrollForm').classList.remove('hidden');
+            // Reset stepper to step 1
+            document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+            document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
+            document.getElementById('step3-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
+            document.getElementById('step1-check').classList.add('hidden');
+            document.getElementById('step2-check').classList.add('hidden');
+            document.getElementById('progress-line').style.width = '0%';
         } 
         else if (step === 2) {
-            step2.classList.remove('hidden');
+            document.getElementById('step2Content').classList.remove('hidden');
             
+            // Populate confirmation details
             document.getElementById('conf_first_name').innerText = document.getElementById('first_name').value;
             document.getElementById('conf_last_name').innerText = document.getElementById('last_name').value;
             document.getElementById('conf_phone').innerText = document.getElementById('phone').value;
@@ -386,31 +404,29 @@
             document.getElementById('conf_city').innerText = document.getElementById('city').value;
             document.getElementById('conf_state').innerText = document.getElementById('state').value;
             document.getElementById('conf_pincode').innerText = document.getElementById('pincode').value;
-            document.getElementById('conf_mode').innerText = document.getElementById('mode').value;
 
-            ind1.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
-            ind2.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
-            ind3.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
-            
-            check1.classList.remove('hidden');
-            check2.classList.add('hidden');
-            progressLine.style.width = '35%';
+            // Update stepper to step 2
+            document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
+            document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+            document.getElementById('step3-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
+            document.getElementById('step1-check').classList.remove('hidden');
+            document.getElementById('step2-check').classList.add('hidden');
+            document.getElementById('progress-line').style.width = '35%';
         }
         else if (step === 3) {
-            step3.classList.remove('hidden');
-            ind1.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
-            ind2.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
-            ind3.className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
-            
-            check1.classList.remove('hidden');
-            check2.classList.remove('hidden');
-            progressLine.style.width = '75%';
+            document.getElementById('step3Content').classList.remove('hidden');
+            // Update stepper to step 3
+            document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
+            document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
+            document.getElementById('step3-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+            document.getElementById('step1-check').classList.remove('hidden');
+            document.getElementById('step2-check').classList.remove('hidden');
+            document.getElementById('progress-line').style.width = '75%';
         }
     }
 
     function submitStep1() {
-        const form = document.getElementById('enrollForm');
-        if (form.reportValidity()) {
+        if (document.getElementById('enrollForm').reportValidity()) {
             goToStep(2);
         }
     }
@@ -456,20 +472,12 @@
                     "amount": data.amount, 
                     "currency": "INR",
                     "name": "Vetri Technology Solutions",
-                    "description": "Course Enrollment Fee",
                     "order_id": data.order_id, 
                     "handler": function (response){
-                        
-                        // Verification Step
+                        // On Razorpay success, directly update and show success
                         const payBtn = document.getElementById('btn-pay-now');
-                        payBtn.innerHTML = 'Verifying Payment...';
+                        payBtn.innerHTML = 'Processing Payment...';
                         payBtn.disabled = true;
-
-                        const verifyPayload = {
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_signature: response.razorpay_signature
-                        };
 
                         fetch('{% url "verify_payment" %}', {
                             method: 'POST',
@@ -477,22 +485,41 @@
                                 'Content-Type': 'application/json',
                                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                             },
-                            body: JSON.stringify(verifyPayload)
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature
+                            })
                         })
                         .then(res => res.json())
                         .then(verifyData => {
                             if(verifyData.status === 'success') {
-                                alert("Payment Successful! A confirmation email has been sent to you.");
-                                window.location.href = '/'; // Redirects to home
+                                // Hide payment step and show success
+                                document.getElementById('step3Content').classList.add('hidden');
+                                
+                                // Populate success details
+                                document.getElementById('succ_txn').innerText = verifyData.transaction_id;
+                                document.getElementById('succ_date').innerText = verifyData.date;
+                                document.getElementById('succ_method').innerText = verifyData.method;
+                                document.getElementById('succ_amount').innerText = verifyData.amount;
+                                document.getElementById('succ_email').innerText = verifyData.email;
+
+                                // Setup download invoice
+                                document.getElementById('btn-download-invoice').onclick = function() {
+                                    window.open(`/api/download-invoice/${verifyData.order_id}/`, '_blank');
+                                };
+                                
+                                // Show success screen
+                                document.getElementById('step4Content').classList.remove('hidden');
                             } else {
-                                alert("Payment Verification Failed: " + verifyData.message);
+                                alert("Error updating system: " + verifyData.message);
                                 payBtn.innerHTML = 'Pay Now';
                                 payBtn.disabled = false;
                             }
                         })
                         .catch(err => {
                             console.error(err);
-                            alert("Payment was processed, but there was an error updating our system.");
+                            alert("Payment processed, but error updating system.");
                             payBtn.innerHTML = 'Pay Now';
                             payBtn.disabled = false;
                         });
@@ -504,7 +531,6 @@
                     },
                     "theme": { "color": "#6C2CB1" }
                 };
-                
                 goToStep(3);
             } else {
                 alert("Error saving details: " + data.message);

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen font-sans py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Our Learning Environment</h1>
+                <p class="text-gray-600 font-medium">Take a look inside Vetri Technology Solutions.</p>
+            </div>
+            
+            <button onclick="history.back()" class="inline-flex items-center justify-center bg-white border-2 border-[#EAE0F5] text-[#6C2CB1] font-bold py-2.5 px-6 rounded-md shadow-sm hover:bg-purple-50 hover:border-purple-200 transition-all">
+                <svg class="w-5 h-5 mr-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                Go Back
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for env in images %}
+            <div class="rounded-2xl overflow-hidden h-64 shadow-md group relative bg-white border border-gray-100">
+                <img src="{{ env.image.url }}" 
+                     alt="{{ env.alt_text|default:'VTS Learning Environment' }}" 
+                     class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out cursor-pointer">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-end p-4">
+                    {% if env.alt_text %}
+                        <span class="text-white font-semibold text-sm drop-shadow-md">{{ env.alt_text }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <p class="text-lg font-medium">No images have been uploaded yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
