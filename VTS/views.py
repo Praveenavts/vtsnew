@@ -18,6 +18,9 @@ from reportlab.lib import colors
 from io import BytesIO
 from django.db.models import Q
 import re
+from reportlab.platypus import Image
+from django.contrib.staticfiles import finders
+import os
 
 
 logger = logging.getLogger(__name__)
@@ -185,53 +188,145 @@ def download_invoice(request, order_id):
     try:
         enrollment = Enrollment.objects.get(razorpay_order_id=order_id)
         buffer = BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
         styles = getSampleStyleSheet()
         
-        title_style = ParagraphStyle(
-            'Title',
-            parent=styles['Heading1'],
-            fontSize=24,
-            spaceAfter=30,
-            alignment=1, 
-            textColor=colors.darkblue
-        )
         normal_style = styles['Normal']
-        normal_style.fontSize = 12
+        normal_style.fontSize = 10
+        normal_style.leading = 14 
+        
+        bold_style = ParagraphStyle('BoldText', parent=normal_style, fontName='Helvetica-Bold')
         
         elements = []
         
-        elements.append(Paragraph("INVOICE", title_style))
-        elements.append(Spacer(1, 12))
+        # ==========================================
+        # 1. HEADER SECTION (Logo & Company Info)
+        # ==========================================
+        logo_path = finders.find('images/VTSlogo.jpg')
         
-        data = [
-            ['Field', 'Details'],
-            ['Name', f"{enrollment.first_name} {enrollment.last_name}"],
-            ['Course', enrollment.course.coursename],
-            ['Amount', enrollment.course.course_fee],
-            ['Status', 'PAID'],
-            ['Order ID', order_id],
-            ['Date', timezone.now().strftime('%d/%m/%Y')]
+        if logo_path and os.path.exists(logo_path):
+            logo = Image(logo_path, width=120, height=50, kind='proportional')
+        else:
+            logo = Paragraph("<b><font size=32 color='#6C2CB1'>VTS</font></b>", styles['Normal'])
+        
+        company_info = Paragraph(
+            "<b>Vetri Technology Solutions</b><br/>"
+            "April's Completx, Bus Stand backside,<br/>"
+            "Surandai-600001", 
+            normal_style
+        )
+        
+        header_table = Table([[logo, company_info]], colWidths=[150, 380])
+        header_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (1, 0), (1, 0), 'LEFT'),
+        ]))
+        elements.append(header_table)
+        elements.append(Spacer(1, 10))
+        
+        line = Table([['']], colWidths=[530])
+        line.setStyle(TableStyle([('LINEBELOW', (0, 0), (-1, -1), 1, colors.black)]))
+        elements.append(line)
+        elements.append(Spacer(1, 20))
+        
+        # ==========================================
+        # 2. BILL TO & INVOICE DETAILS SECTION
+        # ==========================================
+        customer_details = Paragraph(
+            f"{enrollment.first_name} {enrollment.last_name}<br/>"
+            f"+91-{enrollment.phone}<br/>"
+            f"{enrollment.address}<br/>"
+            f"{enrollment.city}, {enrollment.state} - {enrollment.pincode}",
+            normal_style
+        )
+        
+        invoice_date = timezone.now().strftime('%d/%m/%Y')
+        
+        info_data = [
+            [
+                Paragraph("<b>Bill To</b>", normal_style), 
+                customer_details, 
+                '', 
+                Paragraph("<b>Invoice no.</b>", normal_style), 
+                Paragraph(order_id, normal_style)
+            ],
+            [
+                '', '', '', 
+                Paragraph("<b>Date</b>", normal_style), 
+                Paragraph(invoice_date, normal_style)
+            ]
         ]
         
-        table = Table(data, colWidths=[150, 300])
-        table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 14),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        # Widths total 530
+        info_table = Table(info_data, colWidths=[60, 200, 50, 70, 150])
+        info_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (3, 0), (3, -1), 'RIGHT'), 
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ]))
+        elements.append(info_table)
+        elements.append(Spacer(1, 25))
+        
+        # ==========================================
+        # 3. MAIN ITEM GRID SECTION
+        # ==========================================
+        clean_fee = str(enrollment.course.course_fee).replace('₹', '').replace('Rs.', '').strip()
+        formatted_fee = f"Rs. {clean_fee}"
+        
+        item_data = [
+            [
+                Paragraph('<b>Description</b>', normal_style), 
+                Paragraph('<b>Quantity</b>', normal_style), 
+                Paragraph('<b>Unit price</b>', normal_style), 
+                Paragraph('<b>Amount</b>', normal_style)
+            ],
+            [
+                Paragraph(enrollment.course.coursename, normal_style), 
+                '1', 
+                formatted_fee, 
+                formatted_fee
+            ]
+        ]
+        
+        item_table = Table(item_data, colWidths=[280, 70, 90, 90])
+        item_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('BOX', (0, 0), (-1, -1), 1, colors.black),         
+            ('INNERGRID', (0, 0), (-1, -1), 1, colors.black),     
+            ('LINEBELOW', (0, 0), (-1, 0), 1, colors.black),     
+            ('TOPPADDING', (0, 0), (-1, -1), 12),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), 40),      
+        ]))
+        elements.append(item_table)
+        elements.append(Spacer(1, 10))
+        
+        # ==========================================
+        # 4. SUMMARY SECTION (Right Aligned)
+        # ==========================================
+        summary_data = [
+            [Paragraph('<b>Total</b>', normal_style), Paragraph(formatted_fee, normal_style)],
+            [Paragraph('<b>Paid Amount</b>', normal_style), Paragraph(formatted_fee, normal_style)],
+            [Paragraph('<b>Balance Due</b>', normal_style), Paragraph('Rs. 0', normal_style)],
+        ]
+        
+        summary_table = Table(summary_data, colWidths=[90, 90])
+        summary_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LINEBELOW', (0, 0), (-1, -1), 1, colors.black),
+            ('TOPPADDING', (0, 0), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
         ]))
         
-        elements.append(table)
+        layout_table = Table([['', summary_table]], colWidths=[350, 180])
+        elements.append(layout_table)
         
+  
         doc.build(elements)
         buffer.seek(0)
+        
         response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="invoice_{order_id}.pdf"'
+        response['Content-Disposition'] = f'attachment; filename="Invoice_{order_id}.pdf"'
         return response
     
     except Enrollment.DoesNotExist:
@@ -239,6 +334,7 @@ def download_invoice(request, order_id):
     except Exception as e:
         logger.error(f"Error generating PDF invoice: {e}")
         return HttpResponse("Error generating invoice.", status=500)
+    
 
 def about(request):
     return render(request, 'about.html')
