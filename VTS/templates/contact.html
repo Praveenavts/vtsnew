@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
 
 <div class="bg-white font-sans overflow-hidden">
     <section class="relative w-full pt-20 pb-16 lg:pt-16 lg:pb-22">
@@ -33,7 +31,10 @@
                     <div class="bg-white rounded-xl shadow-2xl p-4 border border-2 border-[#6C2CB1]">
                         <h2 class="text-xl font-semibold text-black mb-6">Enquiry Form</h2>
             
-                        <form id="contactEnquiryForm" class=" space-y-1">
+                        <form id="contactEnquiryForm" class="space-y-1">
+                            
+                            {% csrf_token %}
+                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-bold text-gray-800 mb-1">Full Name</label>
@@ -66,7 +67,7 @@
                                 Submit
                             </button>
                         </form>
-                    </div>
+                        </div>
                 </div>
 
             </div>
@@ -143,7 +144,8 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {% for env in env_images|slice:":3" %} <div class="rounded-2xl overflow-hidden h-64 shadow-md group relative">
+            {% for env in env_images|slice:":3" %} 
+            <div class="rounded-2xl overflow-hidden h-64 shadow-md group relative">
                 <img src="{{ env.image.url }}" alt="{{ env.alt_text }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
             </div>
             {% empty %}
@@ -179,6 +181,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+    // 1. FAQ Logic
     document.addEventListener('DOMContentLoaded', function() {
         const faqBtns = document.querySelectorAll('.faq-btn');
         faqBtns.forEach(btn => {
@@ -199,19 +202,15 @@
 
     // 2. Map Initialization Logic (Leaflet.js)
     document.addEventListener('DOMContentLoaded', function() {
-        // Parse the dynamic branches from Django
         const branchesData = JSON.parse(document.getElementById('branches-data').textContent);
         
         if(branchesData.length > 0) {
-            // Initialize map centered at the first branch's coordinates
             var map = L.map('dynamic-map').setView([branchesData[0].latitude, branchesData[0].longitude], 10);
 
-            // Add OpenStreetMap tiles (Free, no API key required)
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
-            // Custom Purple Pin Icon
             var purpleIcon = L.icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -221,7 +220,6 @@
                 shadowSize: [41, 41]
             });
 
-            // Loop through backend data and plot all pins
             var bounds = [];
             branchesData.forEach(function(branch) {
                 var marker = L.marker([branch.latitude, branch.longitude], {icon: purpleIcon}).addTo(map);
@@ -229,7 +227,6 @@
                 bounds.push([branch.latitude, branch.longitude]);
             });
 
-            // Automatically zoom the map to fit all pins perfectly
             if(bounds.length > 1) {
                 map.fitBounds(bounds, {padding: [50, 50]});
             }
@@ -238,14 +235,17 @@
         }
     });
 
-    // 3. Form Submission Logic (AJAX Fetch)
+    // 3. Form Submission Logic (UPDATED TO PASS CSRF TOKEN)
     function submitContactEnquiry() {
         const form = document.getElementById('contactEnquiryForm');
-        if (!form.reportValidity()) return; // Trigger HTML5 validation
+        if (!form.reportValidity()) return; 
 
         const btn = document.getElementById('btn-submit-enquiry');
         btn.innerHTML = 'Submitting...';
         btn.disabled = true;
+
+        // Securely grab the CSRF token from the DOM
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
         const payload = {
             full_name: document.getElementById('eq_name').value,
@@ -259,7 +259,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Make sure to include CSRF token if required by your setup
+                'X-CSRFToken': csrfToken // Token passed to the backend securely
             },
             body: JSON.stringify(payload)
         })
@@ -269,10 +269,12 @@
                 alert('Thank you! Your enquiry has been submitted successfully.');
                 form.reset();
             } else {
-                alert('Error: ' + data.message);
+                // This alerts the validation errors from the backend view (e.g. invalid phone/email)
+                alert('Error: ' + data.message); 
             }
         })
         .catch(error => {
+            console.error(error);
             alert('A network error occurred. Please try again.');
         })
         .finally(() => {

@@ -29,7 +29,6 @@
                     </div>
                 </div>
 
-                <!-- Duration -->
                 <div class="bg-[#EAE0F5] rounded-xl px-4 flex gap-4 items-center h-[55px] w-full">
                     <svg class="text-[#FF9C00] w-1/4 font-bold text-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -43,7 +42,6 @@
                     </div>
                 </div>
 
-                <!-- Certification -->
                 <div class="bg-[#EAE0F5] rounded-xl px-4 flex  items-center h-[55px] w-full">
                     <svg class="text-[#FF9C00] w-1/4 font-bold text-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -57,7 +55,6 @@
                     </div>
                 </div>
 
-                <!-- Mode -->
                 <div class="bg-[#EAE0F5] rounded-xl px-2 flex  items-center h-[55px] w-full">
                     <svg class="text-[#FF9C00] w-1/4 font-bold text-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -80,9 +77,9 @@
                 </button>
 
                 {% if course.brochure %}
-                <a href="{{ course.brochure.url }}" target="_blank" class="border border-[#FF9C00] text-center text-gray-800 py-1.5 px-2 rounded hover:bg-gray-50 transition-colors">
-                    Download Brochure
-                </a>
+                    <a href="{{ course.brochure.url }}" download="{{ course.coursename|slugify }}_Brochure.pdf" class="border border-[#FF9C00] text-center text-gray-800 py-1.5 px-2 rounded hover:bg-gray-50 transition-colors">
+                        Download Brochure
+                    </a>
                 {% endif %}
             </div>
         </div>
@@ -103,11 +100,6 @@
                         </div>
                     {% endif %}
                 </div>
-                {% comment %} <div class="px-4 mt-3 flex items-center gap-2">
-                    <div class="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-black border-b-[6px] border-b-transparent"></div>
-                    <div class="w-full h-1 bg-gray-300 rounded-full"></div>
-                    <span class="text-xs text-gray-500 font-bold">2m</span>
-                </div> {% endcomment %}
             </div>
         </div>
     </div>
@@ -116,7 +108,7 @@
 
     <div class="mb-10">
         <h2 class="text-[17px] font-semibold text-black ">Course Overview</h2>
-        <p class="text-[16px]   whitespace-pre-line">
+        <p class="text-[16px]  whitespace-pre-line">
             {{ course.course_overview }}
         </p>
     </div>
@@ -125,9 +117,15 @@
         <h2 class="text-[17px] font-semibold text-black mb-6">Tools & Technologies Covered</h2>
         <div class="flex flex-wrap gap-5">
             {% for tool in course.get_tools_list %}
-            <div class="bg-[#FDE2B5] rounded-xl flex flex-col items-center justify-center w-[100px] h-[100px] shadow-sm transform hover:-translate-y-1 transition-transform">
-                <div class="w-10 h-10 mb-2 bg-[#22c55e] text-white rounded-full flex items-center justify-center font-bold text-xl">{{ tool|slice:":1" }}</div>
-                <span class="text-[13px] font-extrabold text-black text-center px-1">{{ tool }}</span>
+            <div class="bg-[#FDE2B5] rounded-xl flex flex-col items-center justify-center w-[100px] h-[100px] shadow-sm transform hover:-translate-y-1 transition-transform p-2">
+                <img src="https://cdn.simpleicons.org/{{ tool|lower|cut:' ' }}" 
+                     alt="{{ tool }} logo" 
+                     class="w-10 h-10 mb-2 object-contain"
+                     onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+                <div class="hidden w-10 h-10 mb-2 bg-[#22c55e] text-white rounded-full items-center justify-center font-bold text-xl uppercase">
+                    {{ tool|slice:":1" }}
+                </div>
+                <span class="text-[13px] font-extrabold text-black text-center px-1 leading-tight">{{ tool }}</span>
             </div>
             {% endfor %}
         </div>
@@ -171,12 +169,8 @@
                             Payment
                         </div>
                     </div>
-                    <!-- Horizontal progress line (hidden on mobile) -->
                     <div class="absolute top-1/2 left-[15%] right-[15%] h-0.5 bg-gray-200 -z-10 -translate-y-1/2 hidden sm:block"></div>
                     <div id="progress-line" class="absolute top-1/2 left-[15%] h-0.5 bg-green-500 -z-10 -translate-y-1/2 transition-all duration-500 w-0 hidden sm:block"></div>
-                    <!-- Vertical progress line for mobile (hidden on sm+) -->
-                    <div class="absolute left-1/2 top-[10%] bottom-[10%] w-0.5 bg-gray-200 -z-10 -translate-x-1/2 block sm:hidden"></div>
-                    <div id="progress-line-vertical" class="absolute left-1/2 top-[10%] w-0.5 bg-green-500 -z-10 -translate-x-1/2 transition-all duration-500 h-0 block sm:hidden"></div>
                 </div>
             </div>
 
@@ -190,15 +184,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">First Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="first_name" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="first_name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Last Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="last_name" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="last_name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Phone Number <span class="text-red-500">*</span></label>
-                            <input type="tel" id="phone" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="tel" id="phone" required pattern="\d{10}" title="Please enter exactly 10 digits" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Email Address <span class="text-red-500">*</span></label>
@@ -355,8 +349,6 @@
 
 </div>
 
-<!-- The HTML remains unchanged; only the <script> section is updated below -->
-
 <script>
     let razorpayOptions = null;
     let rzp1 = null;
@@ -382,7 +374,6 @@
 
         if(step === 1) {
             document.getElementById('enrollForm').classList.remove('hidden');
-            // Reset stepper to step 1
             document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
             document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
             document.getElementById('step3-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
@@ -404,8 +395,8 @@
             document.getElementById('conf_city').innerText = document.getElementById('city').value;
             document.getElementById('conf_state').innerText = document.getElementById('state').value;
             document.getElementById('conf_pincode').innerText = document.getElementById('pincode').value;
+            document.getElementById('conf_mode').innerText = document.getElementById('mode').value;
 
-            // Update stepper to step 2
             document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
             document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
             document.getElementById('step3-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
@@ -415,7 +406,6 @@
         }
         else if (step === 3) {
             document.getElementById('step3Content').classList.remove('hidden');
-            // Update stepper to step 3
             document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
             document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
             document.getElementById('step3-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
@@ -425,10 +415,48 @@
         }
     }
 
+    // STRICT JAVASCRIPT VALIDATION ADDED HERE
     function submitStep1() {
-        if (document.getElementById('enrollForm').reportValidity()) {
-            goToStep(2);
+        const form = document.getElementById('enrollForm');
+        
+        // 1. Basic HTML5 required checks
+        if (!form.reportValidity()) {
+            return;
         }
+
+        // 2. Extract values
+        const firstName = document.getElementById('first_name').value.trim();
+        const lastName = document.getElementById('last_name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const email = document.getElementById('email').value.trim();
+
+        // 3. Name Validation (No numbers, symbols except spaces, hyphens, dots)
+        const nameRegex = /^[A-Za-z\s\.\-']+$/;
+        if (!nameRegex.test(firstName)) {
+            alert("Please enter a valid First Name (letters only, no numbers or special symbols).");
+            return;
+        }
+        if (!nameRegex.test(lastName)) {
+            alert("Please enter a valid Last Name (letters only, no numbers or special symbols).");
+            return;
+        }
+
+        // 4. Phone Validation (Exactly 10 Digits)
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            alert("Please enter exactly 10 digits for your Phone Number.");
+            return;
+        }
+
+        // 5. Strict Email Validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid Email Address.");
+            return;
+        }
+
+        // 6. Proceed if everything passes!
+        goToStep(2);
     }
 
     function submitStep2() {
@@ -474,7 +502,6 @@
                     "name": "Vetri Technology Solutions",
                     "order_id": data.order_id, 
                     "handler": function (response){
-                        // On Razorpay success, directly update and show success
                         const payBtn = document.getElementById('btn-pay-now');
                         payBtn.innerHTML = 'Processing Payment...';
                         payBtn.disabled = true;
@@ -494,22 +521,18 @@
                         .then(res => res.json())
                         .then(verifyData => {
                             if(verifyData.status === 'success') {
-                                // Hide payment step and show success
                                 document.getElementById('step3Content').classList.add('hidden');
                                 
-                                // Populate success details
                                 document.getElementById('succ_txn').innerText = verifyData.transaction_id;
                                 document.getElementById('succ_date').innerText = verifyData.date;
                                 document.getElementById('succ_method').innerText = verifyData.method;
                                 document.getElementById('succ_amount').innerText = verifyData.amount;
                                 document.getElementById('succ_email').innerText = verifyData.email;
 
-                                // Setup download invoice
                                 document.getElementById('btn-download-invoice').onclick = function() {
                                     window.open(`/api/download-invoice/${verifyData.order_id}/`, '_blank');
                                 };
                                 
-                                // Show success screen
                                 document.getElementById('step4Content').classList.remove('hidden');
                             } else {
                                 alert("Error updating system: " + verifyData.message);

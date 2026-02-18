@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from .models import (Course, Enrollment, Enquiry, Branch,
                     EnvironmentImage, FAQ, StudentProject,
-                    StudentStory,)
+                    StudentStory,StudentProject,)
 from django.http import HttpResponse
 from django.utils import timezone
 import logging
@@ -16,12 +16,15 @@ from django.views.decorators.csrf import csrf_exempt
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib import colors
 from io import BytesIO
+from django.db.models import Q
+import re
 
 
 logger = logging.getLogger(__name__)
 
 # Create your views here.
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
 
 def home(request):
     featured_courses = Course.objects.filter(is_featured=True)[:3]
@@ -34,19 +37,27 @@ def home(request):
                    })
 
 def courses(request):
-    category = request.GET.get('category')
-
-    if category and category != "All":
-        courses = Course.objects.filter(category=category)
-    else:
-        courses = Course.objects.all()
-        category = "All"
+    courses = Course.objects.all()
+    search_query = request.GET.get('q', '').strip()
+    category = request.GET.get('category', 'All')
+    
+    if category != "All":
+        courses = courses.filter(category=category)
+        
+    if search_query:
+        courses = courses.filter(
+            Q(coursename__icontains=search_query) | 
+            Q(category__icontains=search_query) |
+            Q(short_description__icontains=search_query)
+        ).distinct()
 
     context = {
         'courses': courses,
-        'active_category': category
+        'active_category': category,
+        'search_query': search_query,
     }
     return render(request, 'courses/course_list.html', context)
+
 
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
@@ -248,24 +259,88 @@ def contact(request):
     return render(request, 'contact.html', context)
 
 
-@csrf_exempt
 def submit_enquiry(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            Enquiry.objects.create(
-                full_name=data.get('full_name'),
-                email=data.get('email'),
-                phone=data.get('phone'),
-                course_interest=data.get('course_interest'),
-                message=data.get('message')
+            
+            # 1. Clean the data
+            full_name = data.get('full_name', '').strip()
+            email = data.get('email', '').strip()
+            phone = data.get('phone', '').strip()
+            course_interest = data.get('course_interest', '').strip()
+            message = data.get('message', '').strip()
+
+            # 2. BACKEND VALIDATION
+            if not all([full_name, email, phone, course_interest, message]):
+                return JsonResponse({'status': 'error', 'message': 'All fields are required.'}, status=400)
+            
+            # ---> NEW: Validate Name (Allows only letters, spaces, hyphens, and dots. NO numbers)
+            if not re.match(r"^[A-Za-z\s\.\-']+$", full_name):
+                return JsonResponse({'status': 'error', 'message': 'Please enter a valid name (numbers are not allowed).'}, status=400)
+                
+            # Validate Email format
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                return JsonResponse({'status': 'error', 'message': 'Please enter a valid email address.'}, status=400)
+                
+            # Validate Phone (must be digits and exactly 10 numbers)
+            if not phone.isdigit() or len(phone) < 10:
+                return JsonResponse({'status': 'error', 'message': 'Please enter a valid 10-digit phone number.'}, status=400)
+
+            # 3. Save to Database
+            enquiry = Enquiry.objects.create(
+                full_name=full_name,
+                email=email,
+                phone=phone,
+                course_interest=course_interest,
+                message=message
             )
+
+            # 4. SEND EMAIL TO ADMIN
+            subject = f"New Enquiry: {course_interest} - {full_name}"
+            email_body = f"""
+            Hello Admin,
+
+            You have received a new course enquiry from the website.
+
+            Details:
+            ---------------------
+            Name: {full_name}
+            Email: {email}
+            Phone: {phone}
+            Interested Course: {course_interest}
+            
+            Message:
+            {message}
+            ---------------------
+            """
+            
+            try:
+                send_mail(
+                    subject,
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.ADMIN_EMAIL], 
+                    fail_silently=False,
+                )
+            except Exception as e:
+                print(f"Enquiry saved, but email failed to send: {e}")
+
             return JsonResponse({'status': 'success', 'message': 'Enquiry submitted successfully!'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid data format received.'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    return JsonResponse({'status': 'invalid method'}, status=405)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 
 
 def image_gallery(request):
     images = EnvironmentImage.objects.all()
     return render(request, 'image.html', {'images': images})
+
+
+def student_projects(request):
+    projects = StudentProject.objects.all()
+    return render(request, 'studentsproject.html', {'projects': projects})

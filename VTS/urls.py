@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (home, courses, about, contact,
                     course_detail,create_enrollment,verify_payment,
                     download_invoice,submit_enquiry,image_gallery,
-                    )
+                    student_projects,)
 
 
 urlpatterns = [
@@ -19,5 +19,6 @@ urlpatterns = [
     path('contact', contact, name='contact'),
     path('api/submit-enquiry/', submit_enquiry, name='submit_enquiry'),
     path('learning-environment/', image_gallery, name='image_gallery'),
+    path('student-projects/', student_projects, name='student_projects'),
 
 ]
