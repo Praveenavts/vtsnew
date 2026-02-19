@@ -21,6 +21,10 @@ import re
 from reportlab.platypus import Image
 from django.contrib.staticfiles import finders
 import os
+from requests.exceptions import ConnectionError
+from requests.exceptions import RequestException
+from django.db import transaction
+from .models import Course
 
 
 logger = logging.getLogger(__name__)
@@ -38,6 +42,20 @@ def home(request):
                    'projects': projects,
                    'stories': stories,
                    })
+
+def course_autocomplete(request):
+    if 'term' in request.GET:
+        term = request.GET.get('term')
+        # Filter courses containing the typed term (case-insensitive)
+        courses = Course.objects.filter(coursename__icontains=term)[:10] # Limit to 10 suggestions
+        
+        # Create a list of course names
+        course_names = list(courses.values_list('coursename', flat=True))
+        
+        return JsonResponse(course_names, safe=False)
+    
+    return JsonResponse([], safe=False)
+
 
 def courses(request):
     courses = Course.objects.all()
@@ -68,36 +86,27 @@ def course_detail(request, pk):
 
 def create_enrollment(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        
         try:
+            data = json.loads(request.body)
             course = Course.objects.get(id=data['course_id'])
-            enrollment = Enrollment.objects.create(
-                course=course,
-                first_name=data['first_name'],
-                last_name=data['last_name'],
-                email=data['email'],
-                phone=data['phone'],
-                gender=data['gender'],
-                dob=data['dob'],
-                address=data['address'],
-                city=data['city'],
-                state=data['state'],
-                pincode=data['pincode'],
-                mode=data['mode'],
-                message=data['message']
-            )
 
+            # Calculate amounts
             base_amount = int(float(course.course_fee.replace(',', '').replace('₹', '').strip()))
             gst = int(base_amount * 0.18) 
             total_amount = base_amount + gst
-            order_amount = total_amount * 100
+            order_amount = total_amount * 100  # Razorpay expects paise
             order_currency = 'INR'
-            order_receipt = f'order_rcptid_{enrollment.id}'
             
-            razorpay_order = client.order.create(dict(amount=order_amount, currency=order_currency, receipt=order_receipt))
-            enrollment.razorpay_order_id = razorpay_order['id']
-            enrollment.save()
+            # Hit Razorpay API (NO DATABASE SAVING HERE YET)
+            try:
+                razorpay_order = client.order.create(dict(
+                    amount=order_amount, 
+                    currency=order_currency, 
+                    receipt=f"rcpt_course_{course.id}"
+                ))
+            except RequestException as net_err:
+                logger.error(f"Razorpay Network Error: {net_err}")
+                raise Exception("Payment gateway is currently unreachable. Please try again.")
 
             return JsonResponse({
                 'status': 'success',
@@ -111,7 +120,8 @@ def create_enrollment(request):
 
         except Exception as e:
             logger.error(f"Error in create_enrollment: {e}")
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+            error_msg = str(e) if "Payment gateway" in str(e) else "An unexpected error occurred."
+            return JsonResponse({'status': 'error', 'message': error_msg}, status=400)
             
     return JsonResponse({'status': 'invalid method'}, status=405)
 
@@ -125,46 +135,78 @@ def verify_payment(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON data.'}, status=400)
         
         try:
+            # 1. Verify the Razorpay Signature to ensure the payment is legitimate
             try:
-                enrollment = Enrollment.objects.get(razorpay_order_id=data['razorpay_order_id'])
-                enrollment.payment_status = 'Paid'
-                enrollment.save()
-                logger.info(f"Enrollment {enrollment.id} updated to Paid.")
-            except Enrollment.DoesNotExist:
-                logger.error(f"Enrollment not found for order_id: {data['razorpay_order_id']}")
-                return JsonResponse({'status': 'error', 'message': 'Enrollment not found.'}, status=404)
+                client.utility.verify_payment_signature({
+                    'razorpay_order_id': data['razorpay_order_id'],
+                    'razorpay_payment_id': data['razorpay_payment_id'],
+                    'razorpay_signature': data['razorpay_signature']
+                })
+            except razorpay.errors.SignatureVerificationError:
+                logger.error("Razorpay signature verification failed.")
+                return JsonResponse({'status': 'error', 'message': 'Payment verification failed. Signature mismatch.'}, status=400)
+
+            # 2. Extract User Details sent from the frontend
+            user_data = data.get('user_details')
+            if not user_data:
+                return JsonResponse({'status': 'error', 'message': 'User details missing from request.'}, status=400)
+
+            # 3. Create the Enrollment record NOW (since payment succeeded)
+            try:
+                course = Course.objects.get(id=user_data['course_id'])
+                enrollment = Enrollment.objects.create(
+                    course=course,
+                    first_name=user_data['first_name'],
+                    last_name=user_data['last_name'],
+                    email=user_data['email'],
+                    phone=user_data['phone'],
+                    gender=user_data['gender'],
+                    dob=user_data['dob'],
+                    address=user_data['address'],
+                    city=user_data['city'],
+                    state=user_data['state'],
+                    pincode=user_data['pincode'],
+                    mode=user_data['mode'],
+                    message=user_data['message'],
+                    razorpay_order_id=data['razorpay_order_id'],
+                    payment_status='Paid'  # Mark as paid immediately
+                )
+                logger.info(f"New Enrollment created and set to Paid: {enrollment.id}")
             except Exception as e:
-                logger.error(f"Database update failed: {e}")
-                return JsonResponse({'status': 'error', 'message': 'Failed to update payment status.'}, status=500)
+                logger.error(f"Database creation failed: {e}")
+                return JsonResponse({'status': 'error', 'message': 'Failed to save enrollment to database.'}, status=500)
 
+            # 4. Calculate Amounts for the Email and Response
             try:
-                subject = f"Enrollment Confirmation - {enrollment.course.coursename}"
+                base_amount = int(float(course.course_fee.replace(',', '').replace('₹', '').strip()))
+                gst = int(base_amount * 0.18)
+                total_amount = base_amount + gst
+            except Exception as e:
+                logger.error(f"Amount calculation failed: {e}")
+                total_amount = data.get('amount_paid', 0) # Fallback to frontend amount
+
+            # 5. Send Confirmation Email
+            try:
+                subject = f"Enrollment Confirmation - {course.coursename}"
                 message = f"""
-                Dear {enrollment.first_name} {enrollment.last_name},
+                        Dear {enrollment.first_name} {enrollment.last_name},
 
-                Thank you for enrolling in "{enrollment.course.coursename}" at Vetri Technology Solutions.
+                        Thank you for enrolling in "{course.coursename}" at Vetri Technology Solutions.
 
-                Your payment of ₹{enrollment.course.course_fee} has been successfully received. 
-                Payment Reference ID: {data['razorpay_payment_id']}
+                        Your payment of ₹{total_amount} has been successfully received. 
+                        Payment Reference ID: {data['razorpay_payment_id']}
 
-                Our team will contact you shortly with further instructions.
+                        Our team will contact you shortly with further instructions.
 
-                Best Regards,
-                Vetri Technology Solutions Team
-                """
+                        Best Regards,
+                        Vetri Technology Solutions Team
+                        """
                 send_mail(subject, message, settings.EMAIL_HOST_USER, [enrollment.email], fail_silently=True)
                 logger.info("Confirmation email sent.")
             except Exception as e:
                 logger.error(f"Email sending failed: {e}")
 
-            try:
-                base_amount = int(float(enrollment.course.course_fee.replace(',', '').replace('₹', '').strip()))
-                gst = int(base_amount * 0.18)
-                total_amount = base_amount + gst
-            except Exception as e:
-                logger.error(f"Amount calculation failed: {e}")
-                total_amount = 0
-
+            # 6. Return Data to Frontend for the Success Modal
             response_data = {
                 'status': 'success',
                 'transaction_id': data['razorpay_payment_id'],
@@ -172,17 +214,16 @@ def verify_payment(request):
                 'amount': f"{total_amount:,.0f}",
                 'email': enrollment.email,
                 'method': 'Online Payment',
-                'order_id': enrollment.razorpay_order_id
+                'order_id': data['razorpay_order_id']
             }
             logger.info(f"Payment success, returning: {response_data}")
             return JsonResponse(response_data)
 
         except Exception as e:
             logger.error(f"Unexpected error in verify_payment: {e}")
-            return JsonResponse({'status': 'error', 'message': f'Error updating system: {str(e)}'}, status=500)
+            return JsonResponse({'status': 'error', 'message': f'Error saving enrollment: {str(e)}'}, status=500)
             
     return JsonResponse({'status': 'invalid method'}, status=405)
-
 
 def download_invoice(request, order_id):
     try:

@@ -32,13 +32,12 @@
                         <h2 class="text-xl font-semibold text-black mb-6">Enquiry Form</h2>
             
                         <form id="contactEnquiryForm" class="space-y-1">
-                            
                             {% csrf_token %}
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-bold text-gray-800 mb-1">Full Name</label>
-                                    <input type="text" id="eq_name" required placeholder="Name" class="w-full border-2 border-gray-200 rounded-md py-1.5 px-4 focus:outline-none focus:border-[#6C2CB1]">
+                                    <input type="text" id="eq_name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" placeholder="Name" class="w-full border-2 border-gray-200 rounded-md py-1.5 px-4 focus:outline-none focus:border-[#6C2CB1]">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-800 mb-1">Email Address</label>
@@ -46,7 +45,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-800 mb-1">Phone Number</label>
-                                    <input type="tel" id="eq_phone" required placeholder="1234567890" class="w-full border-2 border-gray-200 rounded-md py-1 px-4 focus:outline-none focus:border-[#6C2CB1]">
+                                    <input type="tel" id="eq_phone" required maxlength="10" minlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter exactly 10 digits" placeholder="10-digit mobile number" class="w-full border-2 border-gray-200 rounded-md py-1 px-4 focus:outline-none focus:border-[#6C2CB1]">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-800 mb-1">Course Interest</label>
@@ -59,15 +58,15 @@
                                     </select>
                                 </div>
                             </div>
-                            <div>
+                            <div class="mt-2">
                                 <label class="block text-sm font-bold text-gray-800 mb-1">Message</label>
                                 <textarea id="eq_msg" required rows="4" placeholder="Type here.." class="w-full border-2 border-gray-200 rounded-md py-2 px-4 focus:outline-none focus:border-[#6C2CB1]"></textarea>
                             </div>
-                            <button type="button" onclick="submitContactEnquiry()" id="btn-submit-enquiry" class="w-full bg-[#FF9C00] text-white font-bold py-2.5 rounded-md shadow-md hover:bg-[#e68a00] transition-colors mt-2">
+                            <button type="button" onclick="submitContactEnquiry()" id="btn-submit-enquiry" class="w-full bg-[#FF9C00] text-white font-bold py-2.5 rounded-md shadow-md hover:bg-[#e68a00] transition-colors mt-4">
                                 Submit
                             </button>
                         </form>
-                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -235,47 +234,100 @@
         }
     });
 
-    // 3. Form Submission Logic (UPDATED TO PASS CSRF TOKEN)
+    // 3. Form Submission Logic
     function submitContactEnquiry() {
         const form = document.getElementById('contactEnquiryForm');
+        
+        // Ensure browser validates required fields before submitting
         if (!form.reportValidity()) return; 
 
+        // Extract values
+        const fullName = document.getElementById('eq_name').value.trim();
+        const email = document.getElementById('eq_email').value.trim();
+        const phone = document.getElementById('eq_phone').value.trim();
+        const courseInterest = document.getElementById('eq_course').value;
+        const message = document.getElementById('eq_msg').value.trim();
+
+        // ----------------------------------------------------
+        // STRICT CLIENT-SIDE VALIDATION
+        // ----------------------------------------------------
+        const nameRegex = /^[A-Za-z\s\.\-']+$/;
+        if (!nameRegex.test(fullName)) {
+            alert("Please enter a valid Name (letters only).");
+            return;
+        }
+
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            alert("Please enter exactly 10 digits for your Phone Number.");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid Email Address.");
+            return;
+        }
+
+        // Change button state
         const btn = document.getElementById('btn-submit-enquiry');
         btn.innerHTML = 'Submitting...';
         btn.disabled = true;
 
-        // Securely grab the CSRF token from the DOM
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        // Securely grab the CSRF token using fallback logic
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrfInput = document.querySelector('#contactEnquiryForm [name=csrfmiddlewaretoken]');
+        const csrfToken = csrfInput ? csrfInput.value : getCookie('csrftoken');
 
         const payload = {
-            full_name: document.getElementById('eq_name').value,
-            email: document.getElementById('eq_email').value,
-            phone: document.getElementById('eq_phone').value,
-            course_interest: document.getElementById('eq_course').value,
-            message: document.getElementById('eq_msg').value,
+            full_name: fullName,
+            email: email,
+            phone: phone,
+            course_interest: courseInterest,
+            message: message,
         };
 
+        // Note: Ensure this URL exactly matches your urls.py path (e.g., '/submit-enquiry/' or '/api/submit-enquiry/')
         fetch('/api/submit-enquiry/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken // Token passed to the backend securely
+                'X-CSRFToken': csrfToken
             },
             body: JSON.stringify(payload)
         })
-        .then(response => response.json())
+        .then(response => {
+            // Attempt to parse JSON regardless of HTTP status code
+            return response.json().catch(() => {
+                throw new Error("Server returned an invalid response (likely a 500 server error).");
+            });
+        })
         .then(data => {
             if(data.status === 'success') {
                 alert('Thank you! Your enquiry has been submitted successfully.');
                 form.reset();
             } else {
-                // This alerts the validation errors from the backend view (e.g. invalid phone/email)
+                // Show specific backend validation errors instead of a fake network error
                 alert('Error: ' + data.message); 
             }
         })
         .catch(error => {
-            console.error(error);
-            alert('A network error occurred. Please try again.');
+            console.error('Submission Error:', error);
+            alert('A server error occurred while submitting your form. Please try again.');
         })
         .finally(() => {
             btn.innerHTML = 'Submit';

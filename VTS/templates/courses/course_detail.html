@@ -7,7 +7,7 @@
     
     <div class="flex flex-col lg:flex-row gap-12 justify-between">
         
-        <div class="w-full lg:w-2.2/3">
+        <div class="w-full lg:w-2/3">
             <h1 class="text-[28px] font-semibold text-[#6621BA] mb-3 leading-tight">
                 {{ course.detailtitle }}
             </h1>
@@ -183,19 +183,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">First Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="first_name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="first_name" placeholder="Enter your first name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Last Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="last_name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="last_name" placeholder="Enter your last name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Phone Number <span class="text-red-500">*</span></label>
-                            <input type="tel" id="phone" required pattern="\d{10}" title="Please enter exactly 10 digits" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="tel" id="phone" placeholder="10-digit mobile number" required maxlength="10" minlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter exactly 10 digits" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Email Address <span class="text-red-500">*</span></label>
-                            <input type="email" id="email" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="email" id="email" placeholder="e.g. name@example.com" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Gender <span class="text-red-500">*</span></label>
@@ -212,19 +212,19 @@
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Address <span class="text-red-500">*</span></label>
-                            <input type="text" id="address" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="address" placeholder="Door no, Street name" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">City <span class="text-red-500">*</span></label>
-                            <input type="text" id="city" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="city" placeholder="e.g. Chennai" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">State <span class="text-red-500">*</span></label>
-                            <input type="text" id="state" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="state" placeholder="e.g. Tamil Nadu" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Pincode <span class="text-red-500">*</span></label>
-                            <input type="text" id="pincode" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <input type="text" id="pincode" placeholder="6-digit pincode" required maxlength="6" minlength="6" pattern="\d{6}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter a valid 6-digit pincode" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
                         </div>
                         <div class="flex flex-col">
                             <label class="text-sm font-bold text-gray-800 mb-1">Select Course <span class="text-red-500">*</span></label>
@@ -240,7 +240,7 @@
                         </div>
                         <div class="flex flex-col md:col-span-3">
                             <label class="text-sm font-bold text-gray-800 mb-1">Message</label>
-                            <textarea id="message" rows="3" placeholder="Type here.." class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]"></textarea>
+                            <textarea id="message" rows="3" placeholder="Any additional information..." class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]"></textarea>
                         </div>
                     </div>
 
@@ -253,19 +253,68 @@
                     <h3 class="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6">Please Confirm Your Details</h3>
                     
                     <div class="bg-[#F3E8FF] rounded-2xl p-4 sm:p-8 max-w-full sm:max-w-4xl mx-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-0 sm:gap-y-6 sm:gap-x-12 text-sm sm:text-[15px] font-semibold text-gray-800">
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">First Name</span><span>: <span id="conf_first_name" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Address</span><span>: <span id="conf_address" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Last Name</span><span>: <span id="conf_last_name" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">City</span><span>: <span id="conf_city" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Phone No</span><span>: <span id="conf_phone" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">State</span><span>: <span id="conf_state" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Email Id</span><span>: <span id="conf_email" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Pincode</span><span>: <span id="conf_pincode" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Gender</span><span>: <span id="conf_gender" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Course Name</span><span>: <span id="conf_course" class="font-normal text-gray-900">{{ course.coursename }}</span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Date of Birth</span><span>: <span id="conf_dob" class="font-normal text-gray-900"></span></span></div>
-                            <div class="flex justify-between md:justify-start gap-2 sm:gap-4"><span class="w-20 sm:w-32">Mode</span><span>: <span id="conf_mode" class="font-normal text-gray-900"></span></span></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 md:gap-x-12 text-sm sm:text-[15px] font-semibold text-gray-800">
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>First Name</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_first_name"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Address</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_address"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Last Name</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_last_name"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>City</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_city"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Phone No</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_phone"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>State</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_state"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Email Id</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_email"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Pincode</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_pincode"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Gender</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_gender"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Course Name</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_course">{{ course.coursename }}</span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Date of Birth</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_dob"></span></span>
+                            </div>
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Mode</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_mode"></span></span>
+                            </div>
+
                         </div>
                     </div>
 
@@ -321,56 +370,57 @@
         </div>
     </div>
 
+
     <div id="successModal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 font-sans transition-opacity">
-        <div class="bg-white w-full max-w-[500px] rounded-[24px] shadow-2xl relative flex flex-col items-center py-8 px-6 sm:px-10 animate-fade-in-up">
-            
-            <button onclick="closeSuccessModal()" class="absolute top-4 right-4 text-black hover:text-red-500 transition-colors z-50 focus:outline-none">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6m0-6l6 6"></path>
-                </svg>
-            </button>
+    <div class="bg-white w-full max-w-[500px] rounded-[24px] shadow-2xl relative flex flex-col items-center py-6 px-5 sm:py-8 sm:px-10 max-h-[90vh] overflow-y-auto animate-fade-in-up">
+        
+        <button onclick="closeSuccessModal()" class="absolute top-4 right-4 text-black hover:text-red-500 transition-colors z-50 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6m0-6l6 6"></path>
+            </svg>
+        </button>
 
-            <div class="w-[70px] h-[70px] bg-[#5DA25E] rounded-full flex items-center justify-center mb-4 shadow-sm mt-2">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </div>
-            
-            <h2 class="text-[24px] font-bold text-black mb-6 text-center tracking-tight">Payment Completed</h2>
+        <div class="w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] bg-[#5DA25E] rounded-full flex items-center justify-center mb-3 sm:mb-4 shadow-sm mt-2 flex-shrink-0">
+            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        
+        <h2 class="text-[20px] sm:text-[24px] font-bold text-black mb-4 sm:mb-6 text-center tracking-tight">Payment Completed</h2>
 
-            <div class="bg-[#E4F0E2] rounded-[16px] p-6 w-full mb-8 shadow-sm">
-                <h3 class="text-[18px] font-bold text-black mb-5">Transaction Details</h3>
-                
-                <div class="flex flex-col space-y-3.5 text-[15px] font-medium text-black">
-                    <div class="flex items-start">
-                        <span class="w-[125px] sm:w-[140px] flex-shrink-0">Transaction Id</span>
-                        <span class="break-all">: <span id="succ_txn" class="ml-1"></span></span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="w-[125px] sm:w-[140px] flex-shrink-0">Date</span>
-                        <span>: <span id="succ_date" class="ml-1"></span></span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="w-[125px] sm:w-[140px] flex-shrink-0">Payment Method</span>
-                        <span>: <span id="succ_method" class="ml-1"></span></span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="w-[125px] sm:w-[140px] flex-shrink-0">Amount Paid</span>
-                        <span>: <span class="ml-1 font-semibold">₹ <span id="succ_amount"></span></span></span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="w-[125px] sm:w-[140px] flex-shrink-0">Email Id</span>
-                        <span class="break-all">: <span id="succ_email" class="ml-1"></span></span>
-                    </div>
+        <div class="bg-[#E4F0E2] rounded-[16px] p-4 sm:p-6 w-full mb-6 sm:mb-8 shadow-sm">
+            <h3 class="text-[16px] sm:text-[18px] font-bold text-black mb-4">Transaction Details</h3>
+            
+            <div class="flex flex-col space-y-3 text-[13px] sm:text-[15px] font-medium text-black">
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-start">
+                    <span class="text-gray-600">Transaction Id</span>
+                    <span class="break-all font-semibold">: <span id="succ_txn"></span></span>
+                </div>
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-start">
+                    <span class="text-gray-600">Date</span>
+                    <span class="font-semibold">: <span id="succ_date"></span></span>
+                </div>
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-start">
+                    <span class="text-gray-600">Method</span>
+                    <span class="font-semibold">: <span id="succ_method"></span></span>
+                </div>
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-start">
+                    <span class="text-gray-600">Amount Paid</span>
+                    <span class="font-bold">: ₹ <span id="succ_amount"></span></span>
+                </div>
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[140px_1fr] items-start">
+                    <span class="text-gray-600">Email Id</span>
+                    <span class="break-all font-semibold">: <span id="succ_email"></span></span>
                 </div>
             </div>
-
-            <button id="btn-download-invoice" class="bg-[#FFA000] hover:bg-[#e68f00] text-white font-bold py-3 px-8 sm:px-12 rounded-[12px] shadow-md transition-transform transform hover:-translate-y-0.5 text-[16px]">
-                Download Invoice
-            </button>
         </div>
+
+        <button id="btn-download-invoice" class="bg-[#FFA000] hover:bg-[#e68f00] text-white font-bold py-3 px-8 sm:px-12 rounded-[12px] shadow-md transition-transform transform hover:-translate-y-0.5 text-[15px] sm:text-[16px] flex-shrink-0 mb-2">
+            Download Invoice
+        </button>
     </div>
+</div>
 
 </div>
 
@@ -385,9 +435,10 @@
 
     function closeEnrollModal() {
         document.getElementById('enrollModal').classList.add('hidden');
+        // Reset the form when closed so data isn't retained
+        document.getElementById('enrollForm').reset();
     }
 
-    // New function to close the success modal
     function closeSuccessModal() {
         document.getElementById('successModal').classList.add('hidden');
     }
@@ -454,7 +505,9 @@
         const lastName = document.getElementById('last_name').value.trim();
         const phone = document.getElementById('phone').value.trim();
         const email = document.getElementById('email').value.trim();
+        const pincode = document.getElementById('pincode').value.trim();
 
+        // 1. Strict Name Validation (Letters & spaces only)
         const nameRegex = /^[A-Za-z\s\.\-']+$/;
         if (!nameRegex.test(firstName)) {
             alert("Please enter a valid First Name (letters only).");
@@ -465,12 +518,21 @@
             return;
         }
 
+        // 2. Strict Phone Validation (Exactly 10 numbers)
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(phone)) {
             alert("Please enter exactly 10 digits for your Phone Number.");
             return;
         }
 
+        // 3. Strict Pincode Validation (Exactly 6 numbers)
+        const pinRegex = /^\d{6}$/;
+        if (!pinRegex.test(pincode)) {
+            alert("Please enter exactly 6 digits for your Pincode.");
+            return;
+        }
+
+        // 4. Strict Email Validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert("Please enter a valid Email Address.");
@@ -501,15 +563,37 @@
             message: document.getElementById('message').value
         };
 
+        // CSRF token fallback logic to fix authentication errors
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value || getCookie('csrftoken');
+
         fetch('{% url "create_enrollment" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                'X-CSRFToken': csrftoken 
             },
             body: JSON.stringify(payload)
         })
-        .then(response => response.json())
+        .then(response => {
+            // Attempt to parse JSON regardless of HTTP status code to catch backend errors cleanly
+            return response.json().catch(() => {
+                throw new Error("Server returned an invalid response.");
+            });
+        })
         .then(data => {
             if(data.status === 'success') {
                 document.getElementById('bill_base').innerText = data.base_amount.toLocaleString('en-IN');
@@ -531,12 +615,15 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                                'X-CSRFToken': csrftoken 
                             },
                             body: JSON.stringify({
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_order_id: response.razorpay_order_id,
-                                razorpay_signature: response.razorpay_signature
+                                razorpay_signature: response.razorpay_signature,
+                                // IMPORTANT: Send the form data to backend ONLY after payment succeeds
+                                user_details: payload,
+                                amount_paid: data.total
                             })
                         })
                         .then(res => res.json())
@@ -568,7 +655,7 @@
                         })
                         .catch(err => {
                             console.error(err);
-                            alert("Payment processed, but error updating system.");
+                            alert("Payment processed, but error updating system. Please contact support.");
                             payBtn.innerHTML = 'Pay Now';
                             payBtn.disabled = false;
                         });
@@ -582,14 +669,16 @@
                 };
                 goToStep(3);
             } else {
-                alert("Error saving details: " + data.message);
+                // Shows the exact error sent from Django (e.g. "Razorpay connection failed")
+                alert("Could not process enrollment: " + (data.message || "Unknown error"));
+                btn.innerHTML = 'Confirm';
+                btn.disabled = false;
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("An error occurred connecting to the server.");
-        })
-        .finally(() => {
+            // Graceful error instead of "Check your internet connection"
+            alert("Payment Gateway timeout or server error. Please try submitting again.");
             btn.innerHTML = 'Confirm';
             btn.disabled = false;
         });
