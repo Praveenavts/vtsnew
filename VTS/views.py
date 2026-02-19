@@ -187,141 +187,201 @@ def verify_payment(request):
 def download_invoice(request, order_id):
     try:
         enrollment = Enrollment.objects.get(razorpay_order_id=order_id)
+        
+        # Create PDF buffer
         buffer = BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+        
+        # Setup Document (Letter size: 595 x 792 points)
+        doc = SimpleDocTemplate(
+            buffer, 
+            pagesize=letter, 
+            rightMargin=40, 
+            leftMargin=40, 
+            topMargin=40, 
+            bottomMargin=40
+        )
+        
         styles = getSampleStyleSheet()
         
+        # Custom Styles
         normal_style = styles['Normal']
         normal_style.fontSize = 10
-        normal_style.leading = 14 
+        normal_style.leading = 14
         
-        bold_style = ParagraphStyle('BoldText', parent=normal_style, fontName='Helvetica-Bold')
+        bold_style = ParagraphStyle(
+            'BoldStyle',
+            parent=normal_style,
+            fontName='Helvetica-Bold'
+        )
         
         elements = []
         
         # ==========================================
-        # 1. HEADER SECTION (Logo & Company Info)
+        # 1. HEADER SECTION
         # ==========================================
-        logo_path = finders.find('images/VTSlogo.jpg')
-        
-        if logo_path and os.path.exists(logo_path):
-            logo = Image(logo_path, width=120, height=50, kind='proportional')
-        else:
-            logo = Paragraph("<b><font size=32 color='#6C2CB1'>VTS</font></b>", styles['Normal'])
+        try:
+            logo_path = finders.find('images/VTSlogo.jpg')
+            if logo_path and os.path.exists(logo_path):
+                logo = Image(logo_path, width=100, height=40, kind='proportional')
+            else:
+                logo = Paragraph("<b><font size=24 color='#6C2CB1'>VTS</font></b>", normal_style)
+        except:
+            logo = Paragraph("<b><font size=24 color='#6C2CB1'>VTS</font></b>", normal_style)
         
         company_info = Paragraph(
             "<b>Vetri Technology Solutions</b><br/>"
-            "April's Completx, Bus Stand backside,<br/>"
-            "Surandai-600001", 
+            "April's Complex, Bus Stand backside,<br/>"
+            "Surandai - 627 859",
             normal_style
         )
         
-        header_table = Table([[logo, company_info]], colWidths=[150, 380])
+        header_table = Table([[logo, company_info]], colWidths=[120, 310])
         header_table.setStyle(TableStyle([
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('ALIGN', (1, 0), (1, 0), 'LEFT'),
+            ('ALIGN', (0, 0), (0, 0), 'LEFT'),
         ]))
         elements.append(header_table)
-        elements.append(Spacer(1, 10))
+        elements.append(Spacer(1, 15))
         
-        line = Table([['']], colWidths=[530])
-        line.setStyle(TableStyle([('LINEBELOW', (0, 0), (-1, -1), 1, colors.black)]))
+        # Divider line
+        line = Table([['']], colWidths=[430])
+        line.setStyle(TableStyle([
+            ('LINEBELOW', (0, 0), (-1, -1), 1, colors.black),
+            ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ]))
         elements.append(line)
         elements.append(Spacer(1, 20))
         
         # ==========================================
-        # 2. BILL TO & INVOICE DETAILS SECTION
+        # 2. BILL TO & INVOICE DETAILS
         # ==========================================
+        customer_header = Paragraph("<b>BILL TO</b>", bold_style)
         customer_details = Paragraph(
             f"{enrollment.first_name} {enrollment.last_name}<br/>"
-            f"+91-{enrollment.phone}<br/>"
+            f"+91 {enrollment.phone}<br/>"
             f"{enrollment.address}<br/>"
             f"{enrollment.city}, {enrollment.state} - {enrollment.pincode}",
             normal_style
         )
         
-        invoice_date = timezone.now().strftime('%d/%m/%Y')
+        invoice_header = Paragraph("<b>INVOICE</b>", bold_style)
+        invoice_info = Paragraph(
+            f"<b>Invoice No:</b> {order_id}<br/>"
+            f"<b>Date:</b> {timezone.now().strftime('%d/%m/%Y')}<br/>"
+            f"<b>Course:</b> {enrollment.course.coursename}",
+            normal_style
+        )
         
-        info_data = [
-            [
-                Paragraph("<b>Bill To</b>", normal_style), 
-                customer_details, 
-                '', 
-                Paragraph("<b>Invoice no.</b>", normal_style), 
-                Paragraph(order_id, normal_style)
-            ],
-            [
-                '', '', '', 
-                Paragraph("<b>Date</b>", normal_style), 
-                Paragraph(invoice_date, normal_style)
-            ]
-        ]
-        
-        # Widths total 530
-        info_table = Table(info_data, colWidths=[60, 200, 50, 70, 150])
+        info_table = Table([
+            [customer_header, '', invoice_header],
+            [customer_details, '', invoice_info]
+        ], colWidths=[180, 20, 210])
         info_table.setStyle(TableStyle([
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('ALIGN', (3, 0), (3, -1), 'RIGHT'), 
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+            ('TOPPADDING', (0, 0), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
         ]))
         elements.append(info_table)
         elements.append(Spacer(1, 25))
         
         # ==========================================
-        # 3. MAIN ITEM GRID SECTION
+        # 3. CALCULATIONS
         # ==========================================
-        clean_fee = str(enrollment.course.course_fee).replace('₹', '').replace('Rs.', '').strip()
-        formatted_fee = f"Rs. {clean_fee}"
+        raw_fee_str = str(enrollment.course.course_fee).replace('₹', '').replace('Rs.', '').replace(',', '').strip()
         
+        try:
+            base_amount = float(raw_fee_str)
+        except ValueError:
+            base_amount = 0.0
+            
+        gst_amount = base_amount * 0.18
+        total_amount = base_amount + gst_amount
+        
+        str_base = f"₹ {base_amount:,.2f}"
+        str_gst = f"₹ {gst_amount:,.2f}"
+        str_total = f"₹ {total_amount:,.2f}"
+        
+        # ==========================================
+        # 4. ITEM TABLE
+        # ==========================================
         item_data = [
             [
-                Paragraph('<b>Description</b>', normal_style), 
-                Paragraph('<b>Quantity</b>', normal_style), 
-                Paragraph('<b>Unit price</b>', normal_style), 
-                Paragraph('<b>Amount</b>', normal_style)
+                Paragraph('<b>Description</b>', bold_style), 
+                Paragraph('<b>Qty</b>', bold_style), 
+                Paragraph('<b>Rate</b>', bold_style), 
+                Paragraph('<b>Amount</b>', bold_style)
             ],
             [
                 Paragraph(enrollment.course.coursename, normal_style), 
                 '1', 
-                formatted_fee, 
-                formatted_fee
+                str_base,
+                str_base
             ]
         ]
         
-        item_table = Table(item_data, colWidths=[280, 70, 90, 90])
+        item_table = Table(item_data, colWidths=[220, 40, 85, 85])
         item_table.setStyle(TableStyle([
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('BOX', (0, 0), (-1, -1), 1, colors.black),         
-            ('INNERGRID', (0, 0), (-1, -1), 1, colors.black),     
-            ('LINEBELOW', (0, 0), (-1, 0), 1, colors.black),     
-            ('TOPPADDING', (0, 0), (-1, -1), 12),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
-            ('BOTTOMPADDING', (0, 1), (-1, -1), 40),      
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
+            ('BOX', (0, 0), (-1, -1), 1, colors.black),
+            ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('LINEBELOW', (0, 0), (-1, 0), 1, colors.black),
+            ('TOPPADDING', (0, 0), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
         ]))
         elements.append(item_table)
-        elements.append(Spacer(1, 10))
+        elements.append(Spacer(1, 15))
         
         # ==========================================
-        # 4. SUMMARY SECTION (Right Aligned)
+        # 5. SUMMARY SECTION - FIXED
         # ==========================================
+        # Create a simpler summary with proper alignment
         summary_data = [
-            [Paragraph('<b>Total</b>', normal_style), Paragraph(formatted_fee, normal_style)],
-            [Paragraph('<b>Paid Amount</b>', normal_style), Paragraph(formatted_fee, normal_style)],
-            [Paragraph('<b>Balance Due</b>', normal_style), Paragraph('Rs. 0', normal_style)],
+            [Paragraph('<b>Subtotal</b>', normal_style), str_base],
+            [Paragraph('<b>GST (18%)</b>', normal_style), str_gst],
+            [Paragraph('<b>Total Amount</b>', bold_style), str_total],
+            [Paragraph('<b>Paid Amount</b>', bold_style), str_total],
+            [Paragraph('<b>Balance Due</b>', normal_style), '₹ 0.00'],
         ]
         
-        summary_table = Table(summary_data, colWidths=[90, 90])
+        # Use right-aligned style for amounts
+        summary_table = Table(summary_data, colWidths=[200, 100])
         summary_table.setStyle(TableStyle([
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('LINEBELOW', (0, 0), (-1, -1), 1, colors.black),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
             ('TOPPADDING', (0, 0), (-1, -1), 8),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+            ('FONTNAME', (0, 2), (0, 3), 'Helvetica-Bold'),
+            ('FONTNAME', (1, 2), (1, 3), 'Helvetica-Bold'),
+            ('LINEABOVE', (0, 2), (1, 2), 1, colors.black),
+            ('LINEABOVE', (0, 3), (1, 3), 1, colors.green),
+            ('LINEBELOW', (0, 4), (1, 4), 0.5, colors.grey),
         ]))
         
-        layout_table = Table([['', summary_table]], colWidths=[350, 180])
+        # Place summary on the right side
+        empty_col = Table([['']], colWidths=[130])
+        layout_table = Table([[empty_col, summary_table]], colWidths=[130, 300])
+        layout_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ]))
         elements.append(layout_table)
         
-  
+        elements.append(Spacer(1, 30))
+        
+        # ==========================================
+        # 6. FOOTER
+        # ==========================================
+        footer_text = Paragraph(
+            "<b>Thank you for your business!</b><br/>"
+            "For any queries, contact us at: vetritechnologysolutions@gmail.com",
+            ParagraphStyle('Footer', parent=normal_style, alignment=1, fontSize=9, textColor=colors.grey)
+        )
+        elements.append(footer_text)
+        
+        # Build PDF
         doc.build(elements)
         buffer.seek(0)
         
@@ -333,7 +393,9 @@ def download_invoice(request, order_id):
         return HttpResponse("Invoice not found.", status=404)
     except Exception as e:
         logger.error(f"Error generating PDF invoice: {e}")
-        return HttpResponse("Error generating invoice.", status=500)
+        import traceback
+        traceback.print_exc()
+        return HttpResponse(f"Error generating invoice: {str(e)}", status=500)
     
 
 def about(request):
