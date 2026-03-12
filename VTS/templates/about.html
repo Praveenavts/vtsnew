@@ -581,7 +581,7 @@
             </div>
 
             <div class="mt-8 md:mt-0 relative z-10">
-                <a href="#" class="inline-block bg-white border border-[#FF9C00] text-gray-900  text-[15px] py-2.5 px-4 rounded-md shadow-lg hover:bg-gray-50 transition-colors whitespace-nowrap">
+                <a href="{% url 'contact' %}" class="inline-block bg-white border border-[#FF9C00] text-gray-900  text-[15px] py-2.5 px-4 rounded-md shadow-lg hover:bg-gray-50 transition-colors whitespace-nowrap">
                     Get Free Consultation Now
                 </a>
             </div>
@@ -596,14 +596,10 @@
             
             function runSequence(selector) {
                 const items = document.querySelectorAll(selector);
-                
-                // 1. Reset: Hide all items
                 items.forEach(item => {
                     item.classList.remove('sequence-visible');
                 });
 
-                // 2. Animate: Show items one by one
-                // We add a small initial delay before the first item appears
                 let delayCounter = 500; 
 
                 items.forEach((item, index) => {
@@ -611,12 +607,9 @@
                         item.classList.add('sequence-visible');
                     }, delayCounter);
                     
-                    // Add 1 second delay between each step
                     delayCounter += 1000;
                 });
 
-                // 3. Restart: Calculate when the last item finishes, wait, then restart
-                // Last item appears at delayCounter. We wait 3s more, then restart.
                 const totalCycleTime = delayCounter + 3000;
                 
                 setTimeout(() => {
@@ -624,22 +617,17 @@
                 }, totalCycleTime);
             }
 
-            // Detect Mobile or Desktop to run the correct sequence
             if (window.innerWidth >= 768) {
-                // Run Desktop Sequence (Targeting the flex-col items inside the md:flex div)
-                // We exclude the mobile items to avoid double firing
                 runSequence('.md\\:flex .sequence-item');
             } else {
-                // Run Mobile Sequence
                 runSequence('.mobile-sequence-item');
             }
             
-            // Optional: Handle window resize to switch sequences if user rotates screen
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    location.reload(); // Simple reload to ensure clean animation state on resize
+                    location.reload(); 
                 }, 500);
             });
         });
