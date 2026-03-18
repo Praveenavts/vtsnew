@@ -17,7 +17,7 @@
                 {% if course.subtitle_3 %}<p>{{ course.subtitle_3 }}</p>{% endif %}
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 max-w-2xl">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8 max-w-3xl">
 
                 <div class="bg-[#EAE0F5] rounded-xl px-4 flex  items-center h-[55px] w-full">
                     <span class="text-[#FF9C00] w-1/4 font-bold text-xl">₹</span>
@@ -35,7 +35,7 @@
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div class="flex flex-col leading-tight">
-                        <span class="text-[12px] text-gray-600">Duration</span>
+                        <span class="text-[13px] text-[#6C2CB1]">Duration</span>
                         <span class="text-[15px]">
                             {{ course.duration }}
                         </span>
@@ -48,7 +48,7 @@
                             d="M9 12l2 2 4-4"></path>
                     </svg>
                     <div class="flex flex-col leading-tight">
-                        <span class="text-[14px] text-gray-600">Certification</span>
+                        <span class="text-[13px] text-[#6C2CB1]">Certification</span>
                         <span class="text-[15px] ">
                             {{ course.certification }}
                         </span>
@@ -61,19 +61,36 @@
                             d="M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                     </svg>
                     <div class="flex flex-col leading-tight">
-                        <span class="text-[15px] text-gray-600">Mode</span>
+                        <span class="text-[13px] text-[#6C2CB1]">Mode</span>
                         <span class="text-[14px] ">
                             {{ course.mode }}
                         </span>
                     </div>
                 </div>
-
+                <div class="bg-[#EAE0F5] rounded-xl px-4 flex items-center h-[55px] w-full">
+                    <svg class="text-[#FF9C00] w-1/4 font-bold text-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-[13px] text-[#6C2CB1]">Job Offer</span>
+                        <span class="text-[15px] {% if course.job_offer == 'Yes' %}text-[#22c55e] font-bold{% endif %}">
+                            {{ course.job_offer }}
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div class="flex gap-4 md:gap-20">
+                {% if course.is_enrollable_online %}
                 <button onclick="openEnrollModal()" class="bg-[#FF9C00] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#e68a00] shadow-sm transition-colors">
                     Enroll Now
                 </button>
+                {% else %}
+                <a href="{% url 'contact' %}" class="bg-[#6C2CB1] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#5a22a0] shadow-sm transition-colors">
+                    Contact to Enroll
+                </a>
+                {% endif %}
 
                 {% if course.brochure %}
                     <a href="{{ course.brochure.url }}" download="{{ course.coursename|slugify }}_Brochure.pdf" class="border border-[#FF9C00] text-center text-gray-800 py-1.5 px-2 rounded hover:bg-gray-50 transition-colors">
@@ -129,19 +146,36 @@
             {% endfor %}
         </div>
     </div>
+    <div class="flex flex-col md:flex-row md:space-x-10">
+        <div class="mb-10 md:mb-0 md:flex-1">
+            <h2 class="text-[17px] font-semibold text-black mb-5">What you will Learn</h2>
+            <ul class="space-y-3">
+                {% for point in course.get_learn_points %}
+                <li class="flex items-start">
+                    <span class="w-2 h-2 rounded-full bg-[#22c55e] mt-1.5 mr-3 flex-shrink-0"></span>
+                    <span class="text-[16px] tracking-tight">{{ point }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <div class="mb-10">
-        <h2 class="text-[17px] font-semibold text-black mb-5">What you will Learn</h2>
-        <ul class="space-y-3">
-            {% for point in course.get_learn_points %}
-            <li class="flex items-start">
-                <span class="w-2 h-2 rounded-full bg-[#22c55e] mt-1.5 mr-3 flex-shrink-0"></span>
-                <span class="text-[16px] tracking-tight">{{ point }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+        <!-- Course Benefits -->
+        {% if course.get_benefits_list %}
+        <div class="mb-10 md:mb-0 md:flex-1">
+            <h2 class="text-[17px] font-semibold text-black mb-5">Course Benefits</h2>
+            <ul class="space-y-3">
+                {% for benefit in course.get_benefits_list %}
+                <li class="flex items-start">
+                    <span class="w-2 h-2 rounded-full bg-[#22c55e] mt-1.5 mr-3 flex-shrink-0"></span>
+                    <span class="text-[16px] tracking-tight">{{ benefit }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
 
+    {% if course.is_enrollable_online %}
     <div id="enrollModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 font-sans transition-opacity">
         <div class="bg-white w-full max-w-[1000px] rounded-3xl shadow-2xl relative flex flex-col max-h-[95vh] overflow-hidden">
             
@@ -693,4 +727,5 @@
         rzp1.open();
     }
 </script>
+{% endif %}
 {% endblock %}

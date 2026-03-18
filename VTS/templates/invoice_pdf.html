@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Invoice</title>
+<style>
+  @page {
+    size: A4;
+    margin: 0.4in;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    color: #000;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 10pt;
+  }
+
+  /* ─── Shared page wrapper ─── */
+  .page {
+    border: 1.5pt solid #555;
+    border-radius: 16pt;
+    padding: 26pt 28pt 20pt 28pt;
+    min-height: 267mm;
+    page-break-after: always;
+    position: relative;
+    margin-bottom: 20pt;
+  }
+
+  /* ─── PAGE 1 : Header ─── */
+  .header {
+    text-align: center;
+    margin-bottom: 12pt;
+  }
+  .header img {
+    width: 50pt;
+    height: auto;
+    display: block;
+    margin: 0 auto 3pt auto;
+  }
+  .header .co-name {
+    font-size: 17pt;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  .header .co-sub {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-bottom: 6pt;
+  }
+  .header .inv-title {
+    font-size: 10.5pt;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  /* ─── Invoice meta ─── */
+  .meta {
+    font-size: 10pt;
+    margin-bottom: 6pt;
+    line-height: 1.65;
+  }
+
+  hr {
+    border: none;
+    border-top: 1pt solid #aaa;
+    margin: 7pt 0 11pt 0;
+  }
+
+  /* ─── Bill From / Bill To (table layout for WeasyPrint) ─── */
+  .bill-wrap {
+    width: 100%;
+    display: table;
+    margin-bottom: 12pt;
+  }
+  .bill-col {
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+    font-size: 9.5pt;
+    line-height: 1.55;
+    padding-right: 8pt;
+  }
+  .bill-col:last-child {
+    padding-right: 0;
+    padding-left: 8pt;
+  }
+  .bill-col .col-head {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 10pt;
+    display: block;
+    margin-bottom: 3pt;
+  }
+
+  /* ─── Section heading ─── */
+  .sec-head {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 10pt;
+    margin-bottom: 5pt;
+  }
+
+  /* ─── Course table ─── */
+  table.course-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12pt;
+  }
+  table.course-tbl th {
+    border: 1pt solid #000;
+    padding: 5pt 4pt;
+    text-align: center;
+    font-weight: bold;
+    font-size: 9.5pt;
+    background-color: #f3f4f6;
+  }
+  table.course-tbl td {
+    border: 1pt solid #000;
+    padding: 4pt;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 9.5pt;
+  }
+  table.course-tbl td.cname {
+    line-height: 1.5;
+    padding: 10pt 6pt;
+  }
+  table.course-tbl td.ctotal {
+    font-weight: bold;
+    font-size: 10pt;
+  }
+
+  /* ─── Payment Details box ─── */
+  .pay-box {
+    border: 1pt solid #000;
+    padding: 8pt 10pt 10pt 10pt;
+    margin-bottom: 10pt;
+  }
+  .pay-box .pay-head {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 10pt;
+    margin-bottom: 7pt;
+  }
+  .pay-wrap {
+    display: table;
+    width: 100%;
+  }
+  .pay-col {
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+    font-size: 9pt;
+    line-height: 1.6;
+    padding-right: 8pt;
+  }
+  .pay-col:last-child {
+    padding-right: 0;
+    padding-left: 4pt;
+  }
+
+  /* ─── Total ─── */
+  .total-wrap {
+    text-align: right;
+    margin-top: 10pt;
+  }
+  .total-wrap .total-amt {
+    font-size: 12.5pt;
+    font-weight: bold;
+  }
+  .total-wrap .total-words {
+    font-size: 9pt;
+    margin-top: 2pt;
+  }
+
+  /* ─── Footer note ─── */
+  .footer-note {
+    text-align: center;
+    font-size: 8pt;
+    font-style: italic;
+    color: #666;
+    position: absolute;
+    bottom: 14pt;
+    left: 0;
+    right: 0;
+  }
+
+  /* ─── PAGE 2 ─── */
+  .page2-title {
+    text-align: center;
+    font-size: 13pt;
+    font-weight: bold;
+    text-decoration: underline;
+    text-transform: uppercase;
+    margin-bottom: 15pt;
+  }
+  .tc-section {
+    margin-bottom: 11pt;
+  }
+  .tc-sec-title {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 9.5pt;
+    margin-bottom: 4pt;
+    display: block;
+  }
+  .tc-item {
+    font-size: 9pt;
+    line-height: 1.45;
+    margin-bottom: 3pt;
+    padding-left: 13pt;
+    text-indent: -13pt;
+  }
+  .tc-item-justify {
+    text-align: justify;
+  }
+
+  @media print {
+    .page { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ PAGE 1 : INVOICE ══════════════════════ -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    {% if logo_url %}
+      <img src="{{ logo_url }}" alt="Vetri Logo" />
+    {% endif %}
+    <div class="co-name">Vetri</div>
+    <div class="co-sub">Technology Solutions</div>
+    <div class="inv-title">IT Training Fees Payment Invoice</div>
+  </div>
+
+  <!-- Invoice Number / Date -->
+  <div class="meta">
+    <div><strong>Invoice Number:</strong> {{ enrollment.id }}</div>
+    <div><strong>Date:</strong> {{ inv_date }}</div>
+  </div>
+
+  <hr />
+
+  <!-- Bill From / Bill To -->
+  <div class="bill-wrap">
+    <div class="bill-col">
+      <span class="col-head">Bill From:</span>
+      <div><strong>GST No:</strong> 33FGPP6566F1Z9</div>
+      <div>Vetri Technology Solutions</div>
+      <div>Old Ward No 17, 1-9-140/29,</div>
+      <div>Sivagurunathapuram, Surandai,</div>
+      <div>Tenkasi, Tamil Nadu - 627859</div>
+      <div><strong>Phone:</strong> 8438164827 / 8438781327</div>
+    </div>
+    <div class="bill-col">
+      <span class="col-head">Bill To:</span>
+      <div><strong>GST No:</strong> Not provided</div>
+      <div><strong>Name:</strong> {{ enrollment.first_name }} {{ enrollment.last_name }}</div>
+      <div><strong>Email:</strong> {{ enrollment.email }}</div>
+      <div><strong>Phone:</strong> {{ enrollment.phone|default:"N/A" }}</div>
+    </div>
+  </div>
+
+  <!-- Course Details -->
+  <div class="sec-head">Course Details</div>
+  <table class="course-tbl">
+    <thead>
+      <tr>
+        <th style="width:38%">Course Name</th>
+        <th style="width:12%">Duration</th>
+        <th style="width:16%">Amount</th>
+        <th style="width:16%">GST (18%)</th>
+        <th style="width:18%">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="cname">{{ enrollment.course.coursename|upper }}</td>
+        <td>{{ enrollment.course.duration|default:"90 Days" }}</td>
+        <td>&#8377;{{ base_amount }}</td>
+        <td>&#8377;{{ gst_amount }}</td>
+        <td class="ctotal">&#8377;{{ total_amount }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Payment Details -->
+  <div class="pay-box">
+    <div class="pay-head">Payment Details</div>
+    <div class="pay-wrap">
+      <div class="pay-col">
+        <div><strong>Candidate Name:</strong> {{ enrollment.first_name }} {{ enrollment.last_name }}</div>
+        <div><strong>Mobile Number:</strong> {{ enrollment.phone|default:"N/A" }}</div>
+        <div><strong>Email:</strong> {{ enrollment.email }}</div>
+      </div>
+      <div class="pay-col">
+        <div><strong>Payment Date &amp; Time:</strong> {{ pay_date_str }}</div>
+        <div><strong>Payment Method:</strong> {{ enrollment.payment_method }}</div>
+        <div><strong>Bank RRN:</strong> {{ enrollment.bank_rrn }}</div>
+        <div><strong>Payment ID:</strong> {{ enrollment.razorpay_payment_id }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Amount -->
+  <div class="total-wrap">
+    <div class="total-amt">Total Amount Paid: &#8377;{{ total_amount }}</div>
+    <div class="total-words">({{ amount_words }})</div>
+  </div>
+
+  <div class="footer-note">* This is a system generated invoice, signature not required. *</div>
+</div>
+
+
+<!-- ══════════════════════ PAGE 2 : TERMS ══════════════════════ -->
+<div class="page">
+  <div class="page2-title">{{ enrollment.course.coursename|upper }}</div>
+
+  <div>
+    <!-- Refund -->
+    <div class="tc-section">
+      <span class="tc-sec-title">Refund &amp; Returns Policy</span>
+      <p class="tc-item"><span >•</span> No refunds or returns are applicable after course enrolment and successful payment.</p>
+      <p class="tc-item"><span >•</span> Candidates are advised to carefully review the course details before proceeding with payment.</p>
+    </div>
+
+    <!-- Cancellation -->
+    <div class="tc-section">
+      <span class="tc-sec-title">Cancellation Policy</span>
+      <p class="tc-item"><span >•</span> Cancellations are not allowed once the payment has been completed.</p>
+      <p class="tc-item"><span >•</span> All enrolments are considered final and non-transferable.</p>
+    </div>
+
+    <!-- Program T&C -->
+    <div class="tc-section">
+      <span class="tc-sec-title">{{ enrollment.course.coursename|upper }} Program Terms &amp; Conditions</span>
+      <p class="tc-item"><span >•</span> By enrolling in any of our courses, you agree to our terms and conditions.</p>
+      <p class="tc-item"><span >•</span> Training will be provided in the Online Mode &amp; Teaching Language is Tamil.</p>
+      <p class="tc-item"><span >•</span> The above Fees is only for the Mentioned IT Training &amp; Relevant Certification and not for the Internship &amp; IT Job Offer with VETRI IT SYSTEMS (VIS)/VETRI TECHNOLOGY SOLUTIONS (VTS).</p>
+      <p class="tc-item"><span >•</span> We are not collecting any Fees for Internship or IT Job Offer with VETRI IT SYSTEMS (VIS)/VETRI TECHNOLOGY SOLUTIONS (VTS).</p>
+      <p class="tc-item"><span >•</span> The above Fees will not be refunded at any Case if the Candidate does not want to continue the Training/Unable to Complete the Training/Requesting for a Break - There is No Refund/Cancellation can be made as this Training is being Provided with the Offered Fees.</p>
+      <p class="tc-item"><span >•</span> If We found any Disciplinary/Compliance issues against the VTS Training Policies during the Training Period, the Training will be Terminated immediately without any Prior notice and there will not be any Refund Processed and Placement Support Provided from our Side.</p>
+      <p class="tc-item tc-item-justify"><span >•</span> The Candidate should have 80% Attendance with Good Performance/Attitude in the Integrated Free Internship Period will only be Eligible to Attend Five Rounds of Direct Interview with VETRI IT SYSTEMS (VIS). The Candidate has to Visit VETRI IT SYSTEMS Surandai Office directly to Attend the Interview. No Online Interviews Arranged. The Candidate should successfully Clear the Five Rounds of Interview &amp; Successful Verification of Documents and Background only Eligible to get the Work From Home Job Offer from Our Startup VETRI IT SYSTEMS.</p>
+    </div>
+
+    <!-- Privacy -->
+    <div class="tc-section">
+      <span class="tc-sec-title">Privacy Policy</span>
+      <p class="tc-item"><span >•</span> We are committed to protecting your privacy and personal data.</p>
+      <p class="tc-item"><span >•</span> All information collected during registration or payment will be used strictly for training and job placement purposes.</p>
+      <p class="tc-item"><span >•</span> We do not share your personal information with any third parties without your explicit consent.</p>
+      <p class="tc-item"><span >•</span> Your data is stored securely and handled in accordance with applicable data protection laws.</p>
+    </div>
+  </div>
+
+  <div class="footer-note"><span >•</span> This is a system generated invoice, signature not required. *</div>
+</div>
+
+</body>
+</html>

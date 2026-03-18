@@ -88,7 +88,7 @@
     </div>
 </section>
 
-{% load static %}
+
 {% load static %}
 <section class="w-full py-16 md:py-24 overflow-hidden font-sans">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -114,16 +114,6 @@
           </svg>
         </div>
       </div>
-
-      <!-- RIGHT: Cards with arc cascade — middle cards widest, top/bottom shortest -->
-      <!-- Arc pattern (ml / mr):
-           Card 1:  ml=0   mr=12%   shortest
-           Card 2:  ml=4%  mr=6%    medium
-           Card 3:  ml=8%  mr=0     widest (right edge)
-           Card 4:  ml=8%  mr=0     widest (right edge)
-           Card 5:  ml=4%  mr=6%    medium
-           Card 6:  ml=0   mr=12%   shortest
-      -->
       <div class="flex flex-col items-stretch space-y-3 z-10 min-w-0">
 
         <!-- Card 1 -->
@@ -332,9 +322,15 @@
                             View Details
                         </a>
 
-                        <button onclick="openEnrollModal('{{ course.id }}', '{{ course.coursename|escapejs }}')" class="bg-[#FF9C00] text-white font-bold text-sm px-4 md:px-8 py-2.5 rounded shadow-sm hover:bg-[#e68a00] transition-colors">
+                        {% if course.is_enrollable_online %}
+                        <button onclick="openEnrollModal('{{ course.id }}', '{{ course.coursename|escapejs }}')" class="bg-[#FF9C00] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#e68a00] shadow-sm transition-colors">
                             Enroll Now
                         </button>
+                        {% else %}
+                        <a href="{% url 'contact' %}" class="bg-[#6C2CB1] text-white font-semibold py-1.5 px-4 rounded-md hover:bg-[#5a22a0] shadow-sm transition-colors">
+                            Contact to Enroll
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

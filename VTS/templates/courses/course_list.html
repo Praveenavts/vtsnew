@@ -4,27 +4,34 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 font-sans">
-
     <div class="relative flex flex-col text-center mb-10">
-        
-        <h2 class="text-[22px] font-semibold text-black mb-4">
-            {% if request.GET.q %}
-                Search Results for "{{ request.GET.q }}"
-            {% else %}
-                Explore Courses by Career Path
-            {% endif %}
-        </h2>
+        <div class="flex items-center justify-center mb-4">
+            <div class="hidden md:block w-[180px] flex-shrink-0"></div>
 
-        <div class="flex flex-wrap gap-2 sm:gap-6 text-md font-semibold">
-            <a href="?category=All" class="{% if active_category == 'All' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">All</a>
-            <a href="?category=Development" class="{% if active_category == 'Development' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">Development</a>
-            <a href="?category=Design" class="{% if active_category == 'Design' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">Design</a>
-            <a href="?category=Data" class="{% if active_category == 'Data' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">Data</a>
-            <a href="?category=Emerging Tech" class="{% if active_category == 'Emerging Tech' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">Emerging Tech</a>
+            <h2 class="flex-1 text-[22px] font-semibold text-black text-center">
+                {% if request.GET.q %}
+                    Search Results for "{{ request.GET.q }}"
+                {% else %}
+                    Explore Courses by Career Path
+                {% endif %}
+            </h2>
+            <div class="hidden md:flex justify-end w-[180px] flex-shrink-0">
+                <a href="{% url 'contact' %}" class="bg-[#FF9C00] text-white font-bold py-2.5 px-6 rounded-md shadow-md hover:bg-[#e68a00] whitespace-nowrap">
+                    Free Consultation
+                </a>
+            </div>
         </div>
-
-        <div class="absolute right-0 top-0 hidden md:block">
-            <a href="{% url 'contact' %}" class="bg-[#FF9C00] text-white font-bold py-2.5 px-6 rounded-md shadow-md hover:bg-[#e68a00]">Free Consultation</a>
+        <div class="flex flex-wrap gap-2 sm:gap-6 text-md font-semibold">
+            <a href="?category=All"
+                class="{% if active_category == 'All' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">
+                All
+            </a>
+            {% for cat in categories %}
+            <a href="?category={{ cat.id }}"
+                class="{% if active_category == cat.id|stringformat:'s' %}bg-[#6C2CB1] text-white px-8 py-2.5 rounded-full shadow-md{% else %}text-[#6C2CB1] px-4 py-2.5 rounded-full hover:text-purple-500{% endif %} transition-all">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
         </div>
     </div>
 
@@ -32,7 +39,7 @@
 
         {% if courses %}
             {% for course in courses %} 
-                <div class="course-card h-full flex flex-col border-[3.5px] border-[#6C2CB1] rounded-2xl overflow-hidden bg-white hover:shadow-xl hover:transform hover:-translate-x-2 hover:-translate-y-2 transition-all duration-300" data-category="{{ course.category }}">  
+                <div class="course-card h-full flex flex-col border-[3.5px] border-[#6C2CB1] rounded-2xl overflow-hidden bg-white hover:shadow-xl hover:transform hover:-translate-x-2 hover:-translate-y-2 transition-all duration-300" data-category="{{ course.category.name }}">  
                     <div class="w-full h-40 bg-blue-50 relative">
                         {% if course.thumbnail %}
                         <img src="{{ course.thumbnail.url }}" alt="{{ course.coursename }}" class="w-full h-full object-cover">
@@ -61,9 +68,15 @@
                             <a href="{% url 'course_detail' course.pk %}" class="border border-[#FF9C00] text-gray-700 font-semibold text-sm px-4 md:px-8 py-2.5 rounded hover:bg-gray-50 transition-colors">
                                 View Details
                             </a>
-                            <button onclick="openEnrollModal('{{ course.id }}', '{{ course.coursename|escapejs }}')" class="bg-[#FF9C00] text-white font-bold text-sm px-4 md:px-8 py-2.5 rounded shadow-sm hover:bg-[#e68a00] transition-colors">
+                            {% if course.is_enrollable_online %}
+                            <button onclick="openEnrollModal('{{ course.id }}', '{{ course.coursename|escapejs }}')" class="bg-[#FF9C00] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#e68a00] shadow-sm transition-colors">
                                 Enroll Now
                             </button>
+                            {% else %}
+                            <a href="{% url 'contact' %}" class="bg-[#6C2CB1] text-white font-semibold py-1.5 px-4 rounded-md hover:bg-[#5a22a0] shadow-sm transition-colors">
+                                Contact to Enroll
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -80,7 +93,7 @@
                     <p class="text-gray-600 mb-6">Try checking your spelling or searching for a different keyword.</p>
                     <a href="?category=All" class="inline-block bg-[#FF9C00] text-white font-bold py-2 px-6 rounded-md hover:bg-[#e68a00]">View All Courses</a>
                 {% else %}
-                    <h3 class="text-2xl font-bold text-[#6C2CB1] mb-3">No Courses Available in {{ active_category }}</h3>
+                    <h3 class="text-2xl font-bold text-[#6C2CB1] mb-3">No Courses Available </h3>
                     <p class="text-gray-600 mb-6">We are currently updating our syllabus for this category. Please check back later!</p>
                     <a href="?category=All" class="inline-block border border-[#6C2CB1] text-[#6C2CB1] font-bold py-2 px-6 rounded-md hover:bg-gray-50">View All Courses</a>
                 {% endif %}
