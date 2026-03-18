@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 import json
 import razorpay
+from razorpay.errors import BadRequestError, ServerError
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -132,9 +133,18 @@ def create_enrollment(request):
                     currency=order_currency,
                     receipt=f"rcpt_course_{course.id}"
                 ))
-            except RequestException as net_err:
-                logger.error(f"Razorpay Network Error: {net_err}")
-                raise Exception("Payment gateway is currently unreachable. Please try again.")
+            except BadRequestError as e:
+                logger.error(f"Razorpay BadRequest: {e}")
+                return JsonResponse({'status': 'error', 'message': f'Payment gateway error: {e}'}, status=400)
+            except ServerError as e:
+                logger.error(f"Razorpay ServerError: {e}")
+                return JsonResponse({'status': 'error', 'message': 'Razorpay server error. Please try again.'}, status=502)
+            except RequestException as e:
+                logger.error(f"Network error reaching Razorpay: {e}")
+                return JsonResponse({'status': 'error', 'message': 'Payment gateway unreachable. Check your internet/firewall.'}, status=503)
+            except Exception as e:
+                logger.error(f"Unexpected Razorpay error: {e}", exc_info=True)
+                return JsonResponse({'status': 'error', 'message': f'Unexpected error: {e}'}, status=500)
 
             return JsonResponse({
                 'status': 'success',
@@ -146,10 +156,11 @@ def create_enrollment(request):
                 'total': total_amount
             })
 
+        except Course.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Course not found.'}, status=404)
         except Exception as e:
-            logger.error(f"Error in create_enrollment: {e}")
-            error_msg = str(e) if "Payment gateway" in str(e) else "An unexpected error occurred."
-            return JsonResponse({'status': 'error', 'message': error_msg}, status=400)
+            logger.error(f"Error in create_enrollment: {e}", exc_info=True)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
     return JsonResponse({'status': 'invalid method'}, status=405)
 
