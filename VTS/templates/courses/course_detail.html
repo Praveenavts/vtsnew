@@ -1,0 +1,809 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.coursename }} in Tirunelveli | Vetri Technology Solutions{% endblock %}
+
+{% block meta_description %}
+Learn {{ course.coursename }} in Tirunelveli with our expert-led, job-oriented training program. Get hands-on experience, certification, and 100% placement support. Enroll today!
+{% endblock %}
+
+{% block content %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "{{ course.coursename|escapejs }}",
+  "description": "{{ course.short_description|escapejs }}",
+  "provider": {
+    "@type": "Organization",
+    "name": "Vetri Technology Solutions",
+    "sameAs": "https://www.vetritechnologysolutions.in" 
+  },
+  "educationalCredentialAwarded": [{
+    "@type": "EducationalOccupationalCredential",
+    "name": "{{ course.certification|escapejs }} Certification",
+    "credentialCategory": "Certificate"
+  }],
+  "offers": [{
+    "@type": "Offer",
+    "category": "Paid",
+    "priceCurrency": "INR",
+    "price": "{{ course.course_fee|floatformat:0 }}",
+    "availability": "https://schema.org/InStock"
+  }],
+  "hasCourseInstance": [{
+    "@type": "CourseInstance",
+    "courseMode": "{% if course.mode == 'Online' %}Online{% else %}Onsite{% endif %}",
+    "courseWorkload": "{{ course.duration|escapejs }}"
+  }]
+}
+</script>
+
+<style>
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        15% { transform: scale(1.15); }
+        30% { transform: scale(1); }
+        45% { transform: scale(1.15); }
+        60% { transform: scale(1); }
+    }
+
+    .animate-heartbeat {
+        animation: heartbeat 2s infinite ease-in-out;
+        display: inline-block;
+    }
+</style>
+<style>
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 1s linear infinite;
+}
+
+@keyframes blink-red {
+    0%, 100% { background-color: rgba(239, 68, 68, 1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    50% { background-color: rgba(220, 38, 38, 0.8); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
+.animate-status-blink {
+    animation: blink-red 1.2s infinite;
+}
+</style>
+
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-sans relative">
+    <div class="mb-6">
+        <a href="{% url 'courses' %}" class="inline-flex items-center text-sm font-semibold text-[#6C2CB1] hover:text-[#FF9C00] transition-colors">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to All Courses
+        </a>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-4 justify-between">
+        
+        <div class="w-full lg:w-2/3">
+            <h1 class="text-[28px] font-semibold text-[#6621BA] mb-3 leading-tight">
+                {{ course.detailtitle }}
+            </h1>
+            <div class="text-[16px] md:text-[15px] mb-6 space-y-1 tracking-tight">
+                {% if course.subtitle_1 %}<p>{{ course.subtitle_1 }}</p>{% endif %}
+                {% if course.subtitle_2 %}<p>{{ course.subtitle_2 }}</p>{% endif %}
+                {% if course.subtitle_3 %}<p>{{ course.subtitle_3 }}</p>{% endif %}
+            </div>
+            <div class="mb-8 w-full max-w-[300px] relative">
+        
+                {% if course.emi_available %}
+                <div class="absolute -top-3 -right-2 z-20 flex items-center gap-1.5 bg-white border-2 border-red-500 px-3 py-1 rounded-full shadow-lg animate-status-blink">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span class="text-[12px] font-black text-white uppercase tracking-wider">EMI AVAILABLE</span>
+                </div>
+                {% endif %}
+
+                <div class="relative overflow-hidden bg-white border-[3px] border-[#6C2CB1] rounded-2xl px-5 py-4 flex items-center gap-4 min-h-[80px] shadow-xl hover:scale-105 transition-transform duration-300">
+                    
+                    <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-[#FF9C00] rounded-xl shadow-inner">
+                        <span class="text-white font-black text-2xl">₹</span>
+                    </div>
+                    
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-[12px] font-extrabold text-[#6C2CB1] uppercase tracking-widest opacity-80">Course Fee</span>
+                        <span class="text-[28px] text-gray-900 font-black tracking-tight">
+                            ₹ <span class="counter" data-target="{{ course.course_fee }}">0</span>
+                        </span>
+                    </div>
+                    
+                    <div class="absolute -bottom-2 -right-2 w-16 h-16 bg-[#6C2CB1]/5 rounded-full"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 w-full max-w-7xl mx-auto">
+                
+                <div class="bg-gradient-to-r from-[#f8faff] to-[#f3e8ff] border border-purple-100 rounded-xl px-3 py-2 flex items-center gap-3 min-h-[60px] shadow-sm">
+                    <svg class="w-5 h-5 text-[#FF9C00] animate-spin-slow flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex flex-col leading-tight min-w-0">
+                        <span class="text-[11px] font-semibold text-[#6C2CB1] uppercase tracking-wider">Duration</span>
+                        <span class="text-[14px] font-bold text-gray-900 truncate">{{ course.duration }}</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-[#f8faff] to-[#f3e8ff] border border-purple-100 rounded-xl px-3 py-2 flex items-center gap-3 min-h-[60px] shadow-sm">
+                    <svg class="text-[#FF9C00] w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <div class="flex flex-col leading-tight min-w-0">
+                        <span class="text-[11px] font-semibold text-[#6C2CB1] uppercase tracking-wider">Certification</span>
+                        <span class="text-[14px] font-bold text-gray-900 truncate">{{ course.certification }}</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-[#f8faff] to-[#f3e8ff] border border-purple-100 rounded-xl px-3 py-2 flex items-center gap-3 min-h-[60px] shadow-sm">
+                    <svg class="text-[#FF9C00] w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="8" stroke-width="3"></circle>
+                        <circle cx="12" cy="12" r="4" stroke-width="2.5"></circle>
+                    </svg>
+                    <div class="flex flex-col leading-tight min-w-0">
+                        <span class="text-[11px] font-semibold text-[#6C2CB1] uppercase tracking-wider">Mode</span>
+                        <span class="text-[14px] font-bold text-gray-900 truncate">{{ course.mode }}</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-[#f8faff] to-[#f3e8ff] border border-purple-100 rounded-xl px-3 py-2 flex items-center gap-3 min-h-[60px] shadow-sm">
+                    <svg class="text-[#FF9C00] w-5 h-5 flex-shrink-0 animate-heartbeat" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <div class="flex flex-col leading-tight min-w-0">
+                        <span class="text-[11px] font-semibold text-[#6C2CB1] uppercase tracking-wider">Job Offer</span>
+                        <span class="text-[14px] font-bold {% if course.job_offer == 'Yes' %}text-[#22c55e]{% else %}text-gray-900{% endif %} truncate">{{ course.job_offer }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 md:gap-10">
+                {% if course.is_enrollable_online %}
+                <button onclick="openEnrollModal('{{ course.id }}', '{{ course.coursename|escapejs }}')" class="bg-[#FF9C00] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#e68a00] shadow-sm transition-colors">
+                    Enroll Now
+                </button>
+                {% else %}
+                <a href="{% url 'contact' %}" class="bg-[#6C2CB1] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#5a22a0] shadow-sm transition-colors">
+                    Contact to Enroll
+                </a>
+                {% endif %}
+
+                {% if course.brochure %}
+                    <button type="button" 
+                            onclick="openBrochureModal('{{ course.coursename|escapejs }}', '{{ course.brochure.url }}', '{{ course.coursename|slugify }}_Brochure.pdf')" 
+                            class="border border-[#FF9C00] text-center text-gray-800 py-1.5 px-2 rounded hover:bg-gray-50 transition-colors">
+                        Download Brochure
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="w-full lg:w-[280px] rounded-xl md:h-[280px] md:py-8 flex-shrink-0">
+            <div class="justify-center items-center overflow-hidden border border-blue-100 rounded-md shadow-sm">
+                <div class="relative w-full h-[190px] bg-blue-100 flex items-center justify-center">
+                    {% if course.short_video %}
+                        <video class="w-full h-full rounded-md object-cover" controls>
+                            <source src="{{ course.short_video.url }}" type="video/mp4">
+                        </video>
+                    {% elif course.thumbnail %}
+                        <img src="{{ course.thumbnail.url }}" class="w-full h-full object-fit" alt="Video Placeholder">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-10 border-gray-800">
+
+    <div class="mb-10">
+        <h2 class="text-[17px] font-semibold text-black ">Course Overview</h2>
+        <p class="text-[16px]  whitespace-pre-line">
+            {{ course.course_overview }}
+        </p>
+    </div>
+    {% with tools=course.get_tools_list %}
+    {% if tools %}
+    <div class="mb-10">
+        <h2 class="text-[17px] font-semibold text-black mb-6">Tools & Technologies Covered</h2>
+        <div class="flex flex-wrap gap-5 ">
+            {% for tool in tools %}
+            <div class="bg-[#FDE2B5] rounded-xl flex flex-col items-center justify-center w-[100px] h-[100px] shadow-sm transform hover:-translate-y-1 transition-transform p-2">
+                
+                <img src="https://cdn.simpleicons.org/{{ tool|lower|cut:' ' }}" 
+                     alt="{{ tool }} logo" 
+                     class="w-10 h-10 mb-2 object-contain"
+                     onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+                
+                <div class="hidden w-10 h-10 mb-2 bg-[#22c55e] text-white rounded-full items-center justify-center font-bold text-xl uppercase">
+                    {{ tool|slice:":1" }}
+                </div>
+                
+                <span class="text-[13px] font-extrabold text-black text-center px-1 leading-tight">{{ tool }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endwith %}
+
+    <div class="flex flex-col md:flex-row border border-blue-100 p-2 rounded-lg md:space-x-10">
+        <div class="mb-10 bg-gray-50 p-2 rounded-lg md:mb-0 md:flex-1">
+            <h2 class="text-[17px] font-semibold text-black mb-5">{{ course.learn_title }}</h2>
+            <ul class="space-y-3">
+                {% for point in course.get_learn_points %}
+                <li class="flex items-start">
+                    <span class="w-2 h-2 rounded-full bg-[#22c55e] mt-1.5 mr-3 flex-shrink-0"></span>
+                    <span class="text-[16px] tracking-tight">{{ point }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Course Benefits -->
+        {% if course.get_benefits_list %}
+        <div class="mb-10 bg-gray-50 p-2 rounded-lg md:mb-0 md:flex-1">
+            <h2 class="text-[17px] font-semibold text-black mb-5">{{ course.benefit_title }}</h2>
+            <ul class="space-y-3">
+                {% for benefit in course.get_benefits_list %}
+                <li class="flex items-start">
+                    <span class="w-2 h-2 rounded-full bg-[#22c55e] mt-1.5 mr-3 flex-shrink-0"></span>
+                    <span class="text-[16px] tracking-tight">{{ benefit }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Enrollment Modal -->
+    <div id="enrollModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 font-sans transition-opacity">
+        <div class="bg-white w-full max-w-[1000px] rounded-3xl shadow-2xl relative flex flex-col max-h-[95vh] overflow-hidden">
+            
+            <button onclick="closeEnrollModal()" class="absolute top-4 right-5 text-gray-500 hover:text-red-500 transition-colors z-50">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+
+            <div class="w-full pt-4 pb-2 px-2 sm:pt-10 sm:pb-6 sm:px-10 border-b border-gray-100 flex justify-center items-center relative">
+                <div class="flex flex-col sm:flex-row items-center w-full max-w-2xl relative z-10 justify-center sm:justify-between gap-2 sm:gap-0">
+                    <div id="step1-indicator" class="flex-1 text-center relative z-20 w-full sm:w-auto">
+                        <div class="bg-[#FF9C00] text-white font-bold py-1 px-1 sm:py-2.5 sm:px-6 rounded-full inline-flex items-center gap-1 sm:gap-2 shadow-md transition-all text-xs sm:text-base">
+                            Enter Details
+                            <svg id="step1-check" class="w-3 h-3 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                    </div>
+                    <div id="step2-indicator" class="flex-1 text-center relative z-20 w-full sm:w-auto">
+                        <div class="bg-gray-200 text-gray-600 font-bold py-1 px-2 sm:py-2.5 sm:px-6 rounded-full inline-flex items-center gap-1 sm:gap-2 transition-all text-xs sm:text-base">
+                            Confirm Details
+                            <svg id="step2-check" class="w-3 h-3 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="absolute top-1/2 left-[25%] right-[25%] h-0.5 bg-gray-200 -z-10 -translate-y-1/2 hidden sm:block overflow-hidden">
+                        <div id="progress-line" class="h-full bg-[#22c55e] transition-all duration-500 w-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-6 py-2 md:px-10 min-h-[300px]">
+                
+                <form id="enrollForm" class="block">
+                    {% csrf_token %}
+                    <input type="hidden" id="course_id" value="{{ course.id }}">
+                    <h3 class="text-xl font-bold text-center mb-6">Enter Correct Details</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">First Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="first_name" placeholder="Enter your first name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Last Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="last_name" placeholder="Enter your last name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                            <input type="tel" id="phone" placeholder="10-digit mobile number" required maxlength="10" minlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter exactly 10 digits" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Email Address <span class="text-red-500">*</span></label>
+                            <input type="email" id="email" placeholder="e.g. name@example.com" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Gender <span class="text-red-500">*</span></label>
+                            <select id="gender" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                                <option value="">Please Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                            <input type="date" id="dob" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Address <span class="text-red-500">*</span></label>
+                            <input type="text" id="address" placeholder="Door no, Street name" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">City <span class="text-red-500">*</span></label>
+                            <input type="text" id="city" placeholder="e.g. Chennai" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">State <span class="text-red-500">*</span></label>
+                            <input type="text" id="state" placeholder="e.g. Tamil Nadu" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Pincode <span class="text-red-500">*</span></label>
+                            <input type="text" id="pincode" placeholder="6-digit pincode" required maxlength="6" minlength="6" pattern="\d{6}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter a valid 6-digit pincode" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Select Course <span class="text-red-500">*</span></label>
+                            <input type="text" id="course_name" value="{{ course.coursename }}" readonly class="border-2 border-gray-300 bg-gray-50 rounded-md py-2 px-3 text-gray-600 focus:outline-none cursor-not-allowed">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Available Mode <span class="text-red-500">*</span></label>
+                            <select id="mode" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                                <option value="">Please Select</option>
+                                <option value="Online">Online</option>
+                                <option value="Offline">Offline</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col md:col-span-3">
+                            <label class="text-sm font-bold text-gray-800 mb-1">Message</label>
+                            <textarea id="message" rows="3" placeholder="Any additional information..." class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center pb-4">
+                        <button type="button" onclick="submitStep1()" class="bg-[#FF9C00] hover:bg-[#e68a00] text-white font-bold py-3 px-12 rounded-md shadow-md transition-colors">Submit</button>
+                    </div>
+                </form>
+
+                <div id="step2Content" class="hidden">
+                    <h3 class="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6">Please Confirm Your Details</h3>
+                    
+                    <div class="bg-[#F3E8FF] rounded-2xl p-4 sm:p-8 max-w-full sm:max-w-4xl mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 md:gap-x-12 text-sm sm:text-[15px] font-semibold text-gray-800">
+                            
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>First Name</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_first_name"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Address</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_address"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Last Name</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_last_name"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>City</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_city"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Phone No</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_phone"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>State</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_state"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Email Id</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_email"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Pincode</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_pincode"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Gender</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_gender"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Course Name</span>
+                                <span class="font-normal text-gray-900 break-words">: <span id="conf_course">{{ course.coursename }}</span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Date of Birth</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_dob"></span></span>
+                            </div>
+                            <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+                                <span>Mode</span>
+                                <span class="font-normal text-gray-900 break-all">: <span id="conf_mode"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 sm:mt-10 flex justify-center gap-4 sm:gap-6 pb-6">
+                        <button type="button" onclick="goToStep(1)" class="bg-white border-2 border-[#FF9C00] text-gray-800 font-bold py-2 px-6 sm:py-2.5 sm:px-8 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base">Back to Edit</button>
+                        <button type="button" id="btn-confirm-final" onclick="submitStep2()" class="bg-[#FF9C00] hover:bg-[#e68a00] text-white font-bold py-2 px-8 sm:py-2.5 sm:px-10 rounded-md shadow-md transition-colors flex items-center justify-center text-sm sm:text-base">
+                            Submit Application
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="brochureModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-full max-w-md mx-4 transform scale-95 transition-transform duration-300 relative" id="brochureModalContent">
+        
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="text-2xl font-bold text-gray-900">Get the Brochure</h3>
+            <button onclick="closeBrochureModal()" class="text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <p class="text-[14px] text-gray-600 mb-6">Enter your details to download the <strong id="modalCourseNameDisplay" class="text-[#6C2CB1]"></strong> syllabus.</p>
+        
+        <form id="brochureForm" onsubmit="handleBrochureSubmit(event)">
+            {% csrf_token %} <input type="hidden" id="modalCourseName">
+            <input type="hidden" id="modalBrochureUrl">
+            <input type="hidden" id="modalBrochureFilename">
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name<span class="text-red-500">*</span></label>
+                    <input type="text" id="brochureName" placeholder="Enter your Name" pattern="[A-Za-z\s\.\-']+" required title="Only letters and spaces allowed" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C2CB1] focus:border-transparent transition-shadow">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                    <input type="tel" id="brochurePhone" placeholder="10-digit mobile number" required maxlength="10" minlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C2CB1] focus:border-transparent transition-shadow">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address <span class="text-red-500">*</span></label>
+                    <input type="email" id="brochureEmail" placeholder="e.g. name@example.com" required class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#6C2CB1] focus:border-transparent transition-shadow">
+                </div>
+            </div>
+            
+            <button type="submit" id="brochureSubmitBtn" class="w-full bg-[#FF9C00] hover:bg-[#e68a00] text-white font-bold py-3 px-4 rounded-lg mt-8 transition-colors flex justify-center items-center shadow-lg">
+                <span>Download PDF Now</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll('.counter');
+
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target')) || 0;
+        let count = 0;
+
+        const speed = 200;
+        const updateCounter = () => {
+            const increment = target / speed;
+
+            if (count < target) {
+                count += increment;
+                counter.innerText = Math.ceil(count).toLocaleString('en-IN');
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.innerText = target.toLocaleString('en-IN');
+            }
+        };
+        updateCounter();
+    });
+});
+
+function openEnrollModal(courseId, courseName) {
+    document.getElementById('course_id').value = courseId;
+    let courseNameInput = document.getElementById('course_name');
+    if(courseNameInput) {
+        courseNameInput.value = courseName;
+    }
+    
+    const modal = document.getElementById('enrollModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); // crucial for centering in Tailwind
+    
+    goToStep(1);
+}
+
+function closeEnrollModal() {
+    const modal = document.getElementById('enrollModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    
+    const courseId = document.getElementById('course_id').value;
+    const courseNameEl = document.getElementById('course_name');
+    const courseName = courseNameEl ? courseNameEl.value : '';
+    
+    document.getElementById('enrollForm').reset();
+    document.getElementById('course_id').value = courseId;
+    if (courseNameEl) courseNameEl.value = courseName;
+}
+
+function goToStep(step) {
+    const form = document.getElementById('enrollForm');
+    const step2Content = document.getElementById('step2Content');
+    
+    // Hide both elements strictly
+    form.classList.add('hidden');
+    form.classList.remove('block');
+    step2Content.classList.add('hidden');
+    step2Content.classList.remove('block');
+    
+    const activeClass = ['bg-[#FF9C00]', 'text-white'];
+    const inactiveClass = ['bg-gray-200', 'text-gray-600'];
+    const completedClass = ['bg-[#22c55e]', 'text-white'];
+
+    if(step === 1) {
+        form.classList.remove('hidden');
+        form.classList.add('block'); // Show Form
+        
+        document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+        document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
+        
+        document.getElementById('step1-check').classList.add('hidden');
+        document.getElementById('step2-check').classList.add('hidden');
+        document.getElementById('progress-line').style.width = '0%';
+    } 
+    else if (step === 2) {
+        step2Content.classList.remove('hidden');
+        step2Content.classList.add('block'); // Show Confirmation Details
+        
+        document.getElementById('conf_first_name').innerText = document.getElementById('first_name').value;
+        document.getElementById('conf_last_name').innerText = document.getElementById('last_name').value;
+        document.getElementById('conf_phone').innerText = document.getElementById('phone').value;
+        document.getElementById('conf_email').innerText = document.getElementById('email').value;
+        document.getElementById('conf_gender').innerText = document.getElementById('gender').value;
+        document.getElementById('conf_dob').innerText = document.getElementById('dob').value;
+        document.getElementById('conf_address').innerText = document.getElementById('address').value;
+        document.getElementById('conf_city').innerText = document.getElementById('city').value;
+        document.getElementById('conf_state').innerText = document.getElementById('state').value;
+        document.getElementById('conf_pincode').innerText = document.getElementById('pincode').value;
+        document.getElementById('conf_mode').innerText = document.getElementById('mode').value;
+        
+        let cName = document.getElementById('course_name') ? document.getElementById('course_name').value : '';
+        document.getElementById('conf_course').innerText = cName;
+
+        document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
+        document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+        
+        document.getElementById('step1-check').classList.remove('hidden');
+        document.getElementById('step2-check').classList.add('hidden');
+        document.getElementById('progress-line').style.width = '100%';
+    }
+}
+
+function submitStep1() {
+    const form = document.getElementById('enrollForm');
+    
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const firstName = document.getElementById('first_name').value.trim();
+    const lastName = document.getElementById('last_name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const pincode = document.getElementById('pincode').value.trim();
+
+    const nameRegex = /^[A-Za-z\s\.\-']+$/;
+    if (!nameRegex.test(firstName)) {
+        alert("Please enter a valid First Name (letters only)."); return;
+    }
+    if (!nameRegex.test(lastName)) {
+        alert("Please enter a valid Last Name (letters only)."); return;
+    }
+
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+        alert("Please enter exactly 10 digits for your Phone Number."); return;
+    }
+
+    const pinRegex = /^\d{6}$/;
+    if (!pinRegex.test(pincode)) {
+        alert("Please enter exactly 6 digits for your Pincode."); return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid Email Address."); return;
+    }
+
+    goToStep(2);
+}
+
+function submitStep2() {
+    const btn = document.getElementById('btn-confirm-final');
+    const originalText = btn.innerHTML; // Save original text
+    
+    // Add Tailwind SVG Spinner and change text
+    btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...`;
+    btn.disabled = true;
+
+    const payload = {
+        course_id: document.getElementById('course_id').value,
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        gender: document.getElementById('gender').value,
+        dob: document.getElementById('dob').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        pincode: document.getElementById('pincode').value,
+        mode: document.getElementById('mode').value,
+        message: document.getElementById('message').value
+    };
+
+    fetch('{% url "create_enrollment" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value 
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'success') {
+            // Change button to success state visually
+            btn.innerHTML = '✅ Application Sent!';
+            btn.classList.remove('bg-[#FF9C00]', 'hover:bg-[#e68a00]');
+            btn.classList.add('bg-green-500');
+
+            // Wait a moment so the user sees the "Sent!" button, then alert and redirect
+            setTimeout(() => {
+                alert("Your application for " + document.getElementById('conf_course').innerText + " has been submitted! A confirmation email has been sent to you.");
+                window.location.href = "/"; 
+            }, 800);
+            
+        } else {
+            // Show the specific error from the backend (e.g. Email failed)
+            alert("Submission failed: " + data.message);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        alert("Network error. Please check your connection and try again.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    });
+}
+
+
+
+// Open Modal & Inject Course Data
+function openBrochureModal(courseName, brochureUrl, filename) {
+    document.getElementById('modalCourseName').value = courseName;
+    document.getElementById('modalCourseNameDisplay').textContent = courseName;
+    document.getElementById('modalBrochureUrl').value = brochureUrl;
+    document.getElementById('modalBrochureFilename').value = filename;
+    
+    const modal = document.getElementById('brochureModal');
+    const content = document.getElementById('brochureModalContent');
+    
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+    }, 10);
+}
+
+// Close Modal & Reset Form
+function closeBrochureModal() {
+    const modal = document.getElementById('brochureModal');
+    const content = document.getElementById('brochureModalContent');
+    
+    modal.classList.add('opacity-0');
+    content.classList.add('scale-95');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('brochureForm').reset();
+    }, 300);
+}
+
+// Helper to get Django CSRF Token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+async function handleBrochureSubmit(event) {
+    event.preventDefault(); // Stop page reload
+    
+    // Gather data first so we can validate it
+    const name = document.getElementById('brochureName').value.trim();
+    const phone = document.getElementById('brochurePhone').value.trim();
+    const email = document.getElementById('brochureEmail').value.trim();
+    const course_name = document.getElementById('modalCourseName').value;
+
+    // ==========================================
+    // 🚦 FRONT-END VALIDATION LOGIC
+    // ==========================================
+    
+    const nameRegex = /^[a-zA-Z\s]+$/; // Letters and spaces only
+    if (!nameRegex.test(name)) {
+        alert("Please enter a valid Name (letters only)."); 
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid Email Address."); 
+        return;
+    } 
+
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+        alert("Please enter exactly 10 digits for your Phone Number."); 
+        return;
+    }
+
+    // ==========================================
+
+    // If it passes validation, disable button and show processing
+    const btn = document.getElementById('brochureSubmitBtn');
+    btn.innerHTML = 'Processing...';
+    btn.disabled = true;
+
+    // Prepare data for Django
+    const data = { name, phone, email, course_name };
+
+    try {
+        // Send data to Django
+        const response = await fetch('/api/save-brochure-lead/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            // SUCCESS! Trigger the file download invisibly
+            const fileUrl = document.getElementById('modalBrochureUrl').value;
+            const fileName = document.getElementById('modalBrochureFilename').value;
+            
+            const a = document.createElement('a');
+            a.href = fileUrl;
+            a.download = fileName; // Forces download instead of opening in browser
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Close modal and show success message
+            closeBrochureModal();
+            alert('Success! Your brochure is now downloading.');
+        } else {
+            alert('Something went wrong. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Connection error. Please try again.');
+    } finally {
+        btn.innerHTML = 'Download PDF Now';
+        btn.disabled = false;
+    }
+}
+</script>
+{% endblock %}

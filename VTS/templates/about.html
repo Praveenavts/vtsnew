@@ -1,0 +1,501 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About Vetri | Online IT Courses & Placement Support{% endblock %}
+{% block meta_description %}
+Learn about Vetri Training, offering job-oriented online IT courses with placement support. Empowering students with real skills and career growth.
+{% endblock %}
+
+{% block content %}
+<div class="bg-white font-sans overflow-x-hidden">
+
+{% if about_content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+    <div class="text-center mb-16">
+        <h1 class="text-2xl font-semibold text-black mb-2 tracking-tight">
+            {{ about_content.main_heading }}
+        </h1>
+        <p class="text-gray-700 text-[15px] md:text-base font-medium">
+            {{ about_content.sub_heading }}
+        </p>
+    </div>
+
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:px-20">
+        <div class="w-full lg:w-1/2">
+            <h2 class="text-xl font-semibold text-black mb-6">
+                {{ about_content.story_heading }}
+            </h2>
+            <div class="space-y-6 text-[15px] text-gray-800 leading-relaxed font-medium">
+                <p>
+                    {{ about_content.paragraph_1 }}
+                </p>
+                
+                {% if about_content.paragraph_2 %}
+                <p>
+                    {{ about_content.paragraph_2 }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex justify-center">
+            {% if about_content.image %}
+                <img src="{{ about_content.image.url }}" alt="{{ about_content.story_heading }}" class="w-full max-w-lg object-contain">
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+
+{% if mission_vision %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 px-4 lg:px-12">
+        
+        <div class="relative w-full max-w-[350px] h-64 mx-auto pt-2 pb-12 group">
+            <div class="relative h-60 z-20 bg-white shadow-[1px_1px_3px_2px_rgba(0,0,0,0.4)] rounded-2xl p-2 text-center border border-gray-100 transition-transform duration-300 group-hover:-translate-y-2">
+                <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                    {% if mission_vision.mission_icon %}
+                        <img src="{{ mission_vision.mission_icon.url }}" alt="{{ mission_vision.mission_title }}" class="w-14 h-14 object-contain">
+                    {% endif %}
+                </div>
+                <h3 class="text-2xl font-extrabold text-black mb-4">{{ mission_vision.mission_title }}</h3>
+                <p class="text-[15px] text-gray-700 font-medium leading-relaxed">
+                    {{ mission_vision.mission_text }}
+                </p>
+            </div>
+            <div class="absolute z-10 bottom-0 -left-3 -right-3 top-24 bg-[#6C2CB1] rounded-[24px] shadow-lg"></div>
+            <div class="absolute z-0 -bottom-8 left-1/2 transform -translate-x-1/2 w-40 h-10 text-[#6C2CB1] drop-shadow-md">
+                <svg viewBox="0 0 100 25" fill="currentColor" class="w-full h-full" preserveAspectRatio="none">
+                    <path d="M0 0 H100 L80 25 H20 L0 0 Z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="relative w-full max-w-[350px] h-64 mx-auto pt-2 pb-12 group mt-10 md:mt-0">
+            <div class="relative h-60 z-20 bg-white rounded-2xl shadow-[1px_1px_3px_2px_rgba(0,0,0,0.4)] p-2 text-center border border-gray-100 transition-transform duration-300 group-hover:-translate-y-2">
+                <div class="w-16 h-16 mx-auto mb-2 flex items-center justify-center">
+                    {% if mission_vision.vision_icon %}
+                        <img src="{{ mission_vision.vision_icon.url }}" alt="{{ mission_vision.vision_title }}" class="w-14 h-14 object-contain">
+                    {% endif %}
+                </div>
+                <h3 class="text-2xl font-extrabold text-black mb-1">{{ mission_vision.vision_title }}</h3>
+                <p class="text-[15px] text-gray-700 font-medium leading-relaxed">
+                    {{ mission_vision.vision_text }}
+                </p>
+            </div>
+            <div class="absolute z-10 bottom-0 -left-3 -right-3 top-24 bg-[#6C2CB1] rounded-[24px] shadow-lg"></div>
+            <div class="absolute z-0 -bottom-8 left-1/2 transform -translate-x-1/2 w-40 h-10 text-[#6C2CB1] drop-shadow-md">
+                <svg viewBox="0 0 100 25" fill="currentColor" class="w-full h-full" preserveAspectRatio="none">
+                    <path d="M0 0 H100 L80 25 H20 L0 0 Z" />
+                </svg>
+            </div>
+        </div>
+        
+    </div>
+</section>
+{% endif %}
+
+
+{% if ecosystem_section %}
+<section class="relative w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-28 py-16 md:py-24 overflow-hidden font-sans">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-4 items-center w-full relative">
+
+        <div class="relative w-full lg:col-span-3 flex justify-center lg:justify-center z-10">
+            <div class="absolute inset-0 w-[85%] sm:w-[70%] lg:w-[115%] xl:w-[110%] h-[95%] bg-[#E8DAFA] rounded-[50px] rounded-tl-[90px] rounded-br-[120px] rounded-bl-[40px] -z-10 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"></div>
+            
+            {% if ecosystem_section.main_image %}
+                <img src="{{ ecosystem_section.main_image.url }}" 
+                     alt="VTS Student Ecosystem" 
+                     class="w-[280px] sm:w-[320px] lg:w-[360px] xl:w-[400px] h-auto object-contain drop-shadow-2xl relative z-10">
+            {% endif %}
+        </div>
+
+        <div class="relative lg:col-span-3 flex justify-center z-30 pointer-events-none lg:-ml-6 xl:-ml-4">
+            <div class="relative shadow-[1px_1px_4px_2px_rgba(0,0,0,0.4)] w-44 h-44 md:w-48 md:h-48 xl:w-[210px] xl:h-[210px] bg-white rounded-full flex items-center justify-center pointer-events-auto">
+                <h2 class="text-xl md:text-[20px] xl:text-[22px] font-extrabold text-black text-center px-4 leading-snug">
+                    {{ ecosystem_section.center_badge_text|linebreaksbr }}
+                </h2>
+                <svg class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[122%] h-[122%] pointer-events-none" viewBox="0 0 100 100" fill="none">
+                    <path d="M 50 5 A 45 45 0 0 1 50 96" stroke="#6C2CB1" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="w-full lg:col-span-6 flex flex-col space-y-6 lg:space-y-14 z-20">
+            
+            {% for branch in ecosystem_section.branches.all %}
+            <div class="relative w-[96%] sm:w-[85%] max-w-[480px] xl:max-w-[500px] mx-auto {% cycle 'lg:w-full lg:mr-auto lg:ml-0' 'lg:w-[92%] lg:mr-0 lg:ml-auto xl:ml-8' 'lg:w-full lg:mr-auto lg:ml-0' %}">
+                
+                <div class="absolute inset-0 bg-[#FF9C00] rounded-full translate-y-[10px] translate-x-[10px]"></div>
+                
+                <div class="relative shadow-[-2px_1px_2px_2px_rgba(0,0,0,0.4)] z-10 bg-white rounded-full border border-gray-100 flex items-center p-2 pr-4 transition-transform duration-300 hover:-translate-x-2">
+                    <div class="w-16 h-16 md:w-[70px] md:h-[70px] bg-white rounded-full border border-gray-100 shadow-sm flex items-center justify-center p-2.5 flex-shrink-0">
+                        {% if branch.logo %}
+                            <img src="{{ branch.logo.url }}" alt="{{ branch.title }}" class="w-full h-full object-contain">
+                        {% endif %}
+                    </div>
+                    <div class="ml-3 md:ml-4 flex-1 py-1">
+                        <div class="flex justify-between items-center mb-1 pr-2">
+                            <h4 class="font-bold text-gray-900 text-[14.5px] xl:text-[16px] leading-tight">{{ branch.title }}</h4>
+                            <a href="{{ branch.link_url }}" target="_blank" rel="noopener noreferrer" class="text-[#6C2CB1] text-[11px] md:text-xs font-bold flex items-center hover:underline flex-shrink-0">
+                                {{ branch.link_text }} 
+                                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
+                        <div class="flex items-start mt-1">
+                            <span class="text-[#FF9C00] font-bold text-[13px] mr-2 leading-tight">✓</span>
+                            <p class="text-[12px] xl:text-[13.5px] text-gray-700 leading-snug">{{ branch.bullet_1 }}</p>
+                        </div>
+                        <div class="flex items-start mt-1">
+                            <span class="text-[#FF9C00] font-bold text-[13px] mr-2 leading-tight">✓</span>
+                            <p class="text-[12px] xl:text-[13.5px] text-gray-700 leading-snug">{{ branch.bullet_2 }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+{% if approach_section %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-2xl font-semibold text-center text-black mb-12">
+        {{ approach_section.title }}
+    </h2>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        
+        {% for card in approach_section.cards.all %}
+        <div class="bg-white rounded-xl shadow-[2px_4px_4px_2px_rgba(101,49,91,0.08)] border border-gray-100 border-l-[10px] border-l-[#6C2CB1] p-8 md:p-6">
+            <p class="text-[15px] text-gray-800 leading-relaxed font-semibold tracking-wide">
+                {{ card.text }}
+            </p>
+        </div>
+        {% endfor %}
+        
+    </div>
+</section>
+{% endif %}
+
+
+{% if skills_section %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-15 bg-white">
+    <h2 class="text-2xl font-semibold text-center text-black mb-10">{{ skills_section.title }}</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 px-4">
+        
+        {% for card in skills_section.cards.all %}
+        <div class="relative w-full max-w-[320px] mx-auto pt-4 pb-16 group {% if not forloop.first %}mt-8 md:mt-0{% endif %}">
+            <div class="relative z-20 bg-gradient-to-r from-gray-300 to-white rounded-t-lg rounded-b-md shadow-xl border border-gray-100 p-8 h-full flex flex-col items-center text-center transition-transform duration-300 group-hover:-translate-y-2">
+                
+                <div class="w-16 h-16 mb-6 flex items-center justify-center">
+                    <svg class="w-14 h-14 text-[#2196F3]" viewBox="0 0 24 24" fill="currentColor">
+                        {% if card.icon == 'platform' %}
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                            <path d="M11 12h2v-4h-2zm0-6h2v2h-2z" fill="white"/> <path d="M11 12h2v-4h-2zm0-6h2v2h-2z"/>
+                        {% elif card.icon == 'approach' %}
+                            <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/>
+                        {% elif card.icon == 'connection' %}
+                            <path d="M15 9H9v2h6V9zm5-7h-4V0H8v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 18H5V4h14v16zM8 19h8v-2H8v2zm0-4h8v-2H8v2z"/>
+                        {% else %}
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        {% endif %}
+                    </svg>
+                </div>
+
+                <h3 class="text-lg font-extrabold text-black mb-6">{{ card.title }}</h3>
+
+                <ul class="space-y-4 text-left w-full pl-2">
+                    <li class="flex items-start text-[15px] text-gray-800 font-semibold tracking-tight">
+                        <span class="w-6 h-6 bg-[#6621BA] rounded-full flex items-center justify-center text-white mr-3 flex-shrink-0 text-[12px]">✓</span> 
+                        {{ card.bullet_1 }}
+                    </li>
+                    <li class="flex items-start text-[15px] text-gray-800 font-semibold tracking-tight">
+                        <span class="w-6 h-6 bg-[#6621BA] rounded-full flex items-center justify-center text-white mr-3 flex-shrink-0 text-[12px]">✓</span> 
+                        {{ card.bullet_2 }}
+                    </li>
+                    <li class="flex items-start text-[15px] text-gray-800 font-semibold tracking-tight">
+                        <span class="w-6 h-6 bg-[#6621BA] rounded-full flex items-center justify-center text-white mr-3 flex-shrink-0 text-[12px]">✓</span> 
+                        {{ card.bullet_3 }}
+                    </li>
+                    
+                    {% if card.bullet_4 %}
+                    <li class="flex items-start text-[15px] text-gray-800 font-semibold tracking-tight">
+                        <span class="w-6 h-6 bg-[#6621BA] rounded-full flex items-center justify-center text-white mr-3 flex-shrink-0 text-[12px]">✓</span> 
+                        {{ card.bullet_4 }}
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="absolute z-10 bottom-0 left-[-10px] right-[-10px] h-[60px] bg-[#6621BA] rounded-b-md shadow-lg"></div>
+            <svg class="absolute bottom-[60px] -left-[10px] w-[10px] h-[10px] z-0" viewBox="0 0 10 10" fill="none">
+                <path d="M0 10 L10 0 V10 H0 Z" fill="#3b0d75" />
+            </svg>
+            <svg class="absolute bottom-[60px] -right-[10px] w-[10px] h-[10px] z-0" viewBox="0 0 10 10" fill="none">
+                <path d="M0 0 L10 10 H0 V0 Z" fill="#3b0d75" />
+            </svg>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+{% endif %}
+
+
+{% if journey_section %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-white">
+    <h2 class="text-2xl font-semibold text-center text-black mb-10">{{ journey_section.title }}</h2>
+
+    <style>
+        .sequence-item {
+            opacity: 0; 
+            transition: opacity 0.5s ease-in-out; 
+        }
+        .sequence-visible {
+            opacity: 1 !important; 
+        }
+    </style>
+
+    <div class="hidden md:flex flex-col items-center justify-center max-w-6xl mx-auto">
+        
+        <div class="flex justify-between items-center w-full mb-8">
+            {% for step in journey_section.steps.all|slice:":3" %}
+                <div class="sequence-item text-center w-64 relative z-10">
+                    <div class="bg-white p-2 inline-block">
+                        {% if step.image %}
+                            <img src="{{ step.image.url }}" alt="{{ step.title }}" class="h-20 mx-auto mb-4 object-contain">
+                        {% endif %}
+                    </div>
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">{{ step.title }}</h4>
+                    <p class="text-sm font-medium text-gray-700">{{ step.description }}</p>
+                </div>
+
+                {% if not forloop.last %}
+                <div class="sequence-item flex-1 flex items-center justify-center relative px-4">
+                    <div class="absolute w-full h-[2px] border-t-2 border-dashed border-gray-400 top-1/2 -translate-y-1/2 z-0"></div>
+                    <div class="relative z-10 bg-white px-2 text-gray-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if journey_section.steps.all|length > 3 %}
+        <div class="sequence-item w-full flex justify-end pr-[118px] -mt-6 mb-6">
+            <div class="h-20 w-[2px] border-l-2 border-dashed border-gray-400 relative">
+                <div class="absolute -bottom-3 -left-3 bg-white p-1 text-gray-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-11 7m0 0l-7-7m7 7V3"></path></svg>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="flex flex-row-reverse justify-between items-center w-full">
+            {% for step in journey_section.steps.all|slice:"3:6" %}
+                <div class="sequence-item text-center w-64 relative z-10">
+                    <div class="bg-white p-2 inline-block">
+                        {% if step.image %}
+                            <img src="{{ step.image.url }}" alt="{{ step.title }}" class="h-20 mx-auto mb-4 object-contain">
+                        {% endif %}
+                    </div>
+                    <h4 class="font-extrabold text-[17px] text-black mb-2">{{ step.title }}</h4>
+                    <p class="text-sm font-medium text-gray-700">{{ step.description }}</p>
+                </div>
+
+                {% if not forloop.last %}
+                <div class="sequence-item flex-1 flex items-center justify-center relative px-4">
+                    <div class="absolute w-full h-[2px] border-t-2 border-dashed border-gray-400 top-1/2 -translate-y-1/2 z-0"></div>
+                    <div class="relative z-10 bg-white px-2 text-gray-500 transform rotate-180">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="md:hidden flex flex-col items-center gap-4">
+        {% for step in journey_section.steps.all %}
+            <div class="mobile-sequence-item sequence-item text-center">
+                {% if step.image %}
+                    <img src="{{ step.image.url }}" alt="{{ step.title }}" class="h-16 mx-auto mb-3 object-contain">
+                {% endif %}
+                <h4 class="font-extrabold text-[17px]">{{ step.title }}</h4>
+            </div>
+
+            {% if not forloop.last %}
+            <div class="mobile-sequence-item sequence-item text-gray-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+</section>
+{% endif %}
+
+
+{% if enrollment_section %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-2xl font-semibold text-center text-black mb-16">{{ enrollment_section.title }}</h2>
+    
+    <div class="flex flex-wrap justify-center gap-x-6 gap-y-16 lg:gap-x-12 px-4 md:px-12 mb-16">
+        
+        {% for audience in enrollment_section.audiences.all|slice:":2" %}
+        <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center group">
+            <div class="absolute -left-5 sm:-left-8 z-20 w-28 h-28 sm:w-[120px] sm:h-[120px] flex items-center justify-center" style="background-color: {{ audience.theme_color }}; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                <div class="w-[90%] h-[90%] bg-white flex items-center justify-center" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                    <div class="w-[90%] h-[90%] flex items-center justify-center overflow-hidden" style="background-color: {{ audience.theme_color }}; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                        {% if audience.image %}
+                            <img src="{{ audience.image.url }}" alt="{{ audience.title }}" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="w-full h-14 bg-white rounded-r-full shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center relative z-10 pl-24 sm:pl-28 pr-8 border-r-[6px] transition-transform duration-300 group-hover:scale-105" style="border-color: {{ audience.theme_color }};">
+                <h4 class="text-lg text-gray-900">{{ audience.title }}</h4>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-x-6 gap-y-16 lg:gap-x-12 px-4 md:px-12">
+        
+        {% for audience in enrollment_section.audiences.all|slice:"2:" %}
+        <div class="relative w-full sm:w-[45%] lg:w-[30%] flex items-center group">
+            <div class="absolute -left-5 sm:-left-8 z-20 w-28 h-28 sm:w-[120px] sm:h-[120px] flex items-center justify-center" style="background-color: {{ audience.theme_color }}; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                <div class="w-[90%] h-[90%] bg-white flex items-center justify-center" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                    <div class="w-[90%] h-[90%] flex items-center justify-center overflow-hidden" style="background-color: {{ audience.theme_color }}; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                        {% if audience.image %}
+                            <img src="{{ audience.image.url }}" alt="{{ audience.title }}" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="w-full h-14 bg-white rounded-r-full shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center relative z-10 pl-24 sm:pl-28 pr-8 border-r-[6px] transition-transform duration-300 group-hover:scale-105" style="border-color: {{ audience.theme_color }};">
+                <h4 class="text-lg text-gray-900">{{ audience.title }}</h4>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+{% endif %}
+
+
+<section class="w-full bg-[#1b75f3] rounded-xl py-2 text-white text-center">
+        <h2 class="text-2xl  mb-10">Our Impact</h2>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-blue-400/50">
+            {% for stat in company_stats %}
+            <div class="flex flex-col items-center justify-center pt-4 md:pt-0">
+                <span class="text-4xl md:text-[28px] font-bold tracking-tight mb-2">{{ stat.value }}</span>
+                <span class="text-sm md:text-[15px] text-white">{{ stat.label }}</span>
+            </div>
+            {% empty %}
+            <div class="flex flex-col items-center justify-center pt-4 md:pt-0 col-span-3 text-white">
+                <span class="text-sm font-medium">Please add stats in the Admin Panel</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+{% if cta_banner %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="relative bg-[#6C2CB1] rounded-2xl overflow-hidden py-8 px-4 flex flex-col md:flex-row items-center justify-between shadow-2xl">
+        
+        <div class="absolute inset-0 pointer-events-none -z-0">
+            <div class="absolute top-4 left-1/4 w-12 h-12 bg-white/10 rounded-full"></div>
+            <div class="absolute bottom-1/4 left-1/3 w-24 h-24 bg-white/10 rounded-full"></div>
+            <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-white/10 rounded-full"></div>
+            <div class="absolute -top-10 right-10 w-48 h-48 bg-white/10 rounded-full"></div>
+            <div class="absolute -bottom-8 right-1/2 w-20 h-20 bg-white/10 rounded-full"></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 lg:gap-8 relative z-10 w-full md:w-3/4">
+            
+            <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-white rounded-full overflow-hidden border-4 border-white shadow-lg">
+                {% if cta_banner.image %}
+                    <img src="{{ cta_banner.image.url }}" alt="{{ cta_banner.title }}" class="w-full h-full object-cover">
+                {% endif %}
+            </div>
+            
+            <div class="pt-2">
+                <h2 class="text-xl font-semibold text-white mb-3">{{ cta_banner.title }}</h2>
+                <p class="text-gray-100 text-[15px] font-medium leading-relaxed max-w-xl">
+                    {{ cta_banner.description }}
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-8 md:mt-0 relative z-10">
+            <button onclick="sendWhatsApp()" class="inline-block bg-white border border-[#FF9C00] text-gray-900 text-[15px] py-2.5 px-4 rounded-md shadow-lg hover:bg-gray-50 transition-colors whitespace-nowrap font-bold">
+                {{ cta_banner.button_text }}
+            </button>
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+</div>
+
+<script>
+function sendWhatsApp() {
+  let message = "Hello, I’m interested in enrolling in an IT course. Can you guide me on the best course, fees, and upcoming batches?";
+  let url = "https://wa.me/918438164827?text=" + encodeURIComponent(message);
+  window.open(url, "_blank");
+}
+</script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            function runSequence(selector) {
+                const items = document.querySelectorAll(selector);
+                items.forEach(item => {
+                    item.classList.remove('sequence-visible');
+                });
+
+                let delayCounter = 500; 
+
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('sequence-visible');
+                    }, delayCounter);
+                    
+                    delayCounter += 1000;
+                });
+
+                const totalCycleTime = delayCounter + 3000;
+                
+                setTimeout(() => {
+                    runSequence(selector);
+                }, totalCycleTime);
+            }
+
+            if (window.innerWidth >= 768) {
+                runSequence('.md\\:flex .sequence-item');
+            } else {
+                runSequence('.mobile-sequence-item');
+            }
+            
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    location.reload(); 
+                }, 500);
+            });
+        });
+    </script>
+{% endblock %}

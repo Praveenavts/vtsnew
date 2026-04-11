@@ -1,0 +1,888 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="relative w-full min-h-[500px] lg:min-h-[440px] flex items-center bg-cover bg-center" 
+         style="background-image: url('{% if banner and banner.background_image %}{{ banner.background_image.url }}{% else %}{% static 'images/homebanner1.png' %}{% endif %}');">
+    
+    <div class="absolute inset-0 bg-purple-900/20 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
+
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pb-32">
+        
+        <div class="bg-black/30 backdrop-blur-sm p-6 md:p-6 rounded-xl max-w-[620px] shadow-2xl border border-white/10">
+            <h1 class="font-extrabold text-left text-white mb-4 leading-snug tracking-wide">
+                {% if banner %}
+                    {{ banner.headline }}
+                {% else %}
+                    Job-Oriented Online IT Courses with Placement Support
+                {% endif %}
+            </h1>
+            <p class="text-gray-100 text-[15px] text-left md:text-sm leading-relaxed font-medium">
+                {% if banner %}
+                    {{ banner.description }}
+                {% else %}
+                    This platform is designed for learners who want to build practical IT skills through 
+                    structured training programs. Along with training, learners are informed about 
+                    available IT services and consultancy support.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="mt-8 flex flex-col sm:flex-row gap-5">
+            <a href="{% url 'courses' %}" class="bg-[#FF9C00] hover:bg-[#e68a00] text-white font-bold py-2 px-8 rounded-md transition-all duration-300 shadow-lg text-center transform hover:-translate-y-1">
+                View Training Program
+            </a>
+            <button onclick="sendWhatsApp()" class="bg-white border-2 border-[#FF9C00] hover:bg-gray-100 text-gray-900 font-bold py-2 px-8 rounded-md transition-all duration-300 shadow-lg text-center transform hover:-translate-y-1">
+                Free Consultation
+            </button>
+        </div>
+
+    </div>
+</section>
+
+<section class="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 md:-mt-10 pb-4">
+    <div class="bg-[#1b75f3] rounded-2xl shadow-[2px_5px_2px_2px_rgba(0,0,0,0.3)] py-2 px-4 md:px-4">
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-4 text-white text-center divide-y md:divide-y-0 md:divide-x divide-blue-400/50"> 
+            
+            {% for stat in company_stats %}
+            <div class="flex flex-col items-center justify-center pt-4 md:pt-0">
+                <span class="text-4xl md:text-[28px] font-bold tracking-tight mb-2">{{ stat.value }}</span>
+                <span class="text-sm md:text-[15px] text-white">{{ stat.label }}</span>
+            </div>
+            {% empty %}
+            <div class="flex flex-col items-center justify-center pt-4 md:pt-0 col-span-3 text-white">
+                <span class="text-sm font-medium">Please add stats in the Admin Panel</span>
+            </div>
+            {% endfor %} 
+        </div>
+    </div>
+</section>
+
+
+{% if about_section %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 py-4 overflow-hidden">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-12">
+        
+        <div class="relative w-full lg:w-1/2 pb-10 lg:pb-0 lg:pr-12 mt-4">
+            <img src="{{ about_section.image.url }}" 
+                 alt="{{ about_section.main_heading }}" 
+                 class="w-full h-auto rounded-2xl object-cover shadow-lg">
+            
+            <div class="absolute -bottom-8 right-0 sm:right-4 lg:-right-4 bg-white p-6 sm:p-7 rounded-xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border-l-8 border-[#6C2CB1] max-w-[280px] sm:max-w-[320px] z-10">
+                <h3 class="text-[19px] font-bold text-gray-900 mb-3 tracking-tight">
+                    {{ about_section.badge_title }}
+                </h3>
+                <p class="text-gray-700 text-[14px] leading-relaxed">
+                    {{ about_section.badge_description }}
+                </p>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 pt-8 lg:pt-0 lg:pl-8">
+            <h2 class="text-xl font-semibold text-black mb-2">
+                {{ about_section.main_heading }}
+            </h2>
+            <p class="text-gray-800 text-[12px] md:text-base leading-relaxed mb-6">
+                {{ about_section.main_description }}
+            </p>
+            
+            <a href="about" class="inline-block bg-transparent border border-[#FF9C00] text-gray-900 px-4 py-1.5 rounded-md hover:bg-[#FF9C00] hover:text-white transition-all duration-300 shadow-sm">
+                Learn More
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+
+{% if benefit_section %}
+<section class="w-full py-16 md:py-24 overflow-hidden font-sans">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid grid-cols-1 lg:grid-cols-[28%_15%_57%] items-center">
+
+      <div class="relative flex justify-center lg:justify-end mb-10 lg:mb-0 z-10">
+        <div class="absolute inset-0 w-3/4 md:w-full h-[90%] bg-[#E8DAFA] rounded-tl-[120px] rounded-br-[120px] rounded-tr-[20px] rounded-bl-[30px] -z-10 mt-10 ml-6 md:ml-0 transform -rotate-3"></div>
+        <img src="{{ benefit_section.image.url }}"
+             loading="lazy"
+             alt="Student Illustration"
+             class="w-56 md:w-64 h-auto object-contain drop-shadow-2xl">
+      </div>
+
+      <div class="flex justify-center z-30 my-6 lg:my-0">
+        <div class="relative shadow-[1px_1px_4px_2px_rgba(0,0,0,0.4)] w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+          <h2 class="text-[15px] md:text-[17px] xl:text-[19px] font-extrabold text-black text-center px-2 leading-snug">
+            {{ benefit_section.badge_text }}
+          </h2>
+          <svg class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[122%] h-[122%] pointer-events-none" viewBox="0 0 100 100" fill="none">
+            <path d="M 50 5 A 45 45 0 0 1 50 96" stroke="#6C2CB1" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="flex flex-col items-stretch space-y-3 z-10 min-w-0">
+        
+        {% for card in benefit_section.cards.all %}
+        <div class="relative min-w-0 transform transition-transform hover:-translate-x-1 {% cycle 'lg:mr-[12%]' 'lg:ml-[4%] lg:mr-[6%]' 'lg:ml-[8%]' 'lg:ml-[8%]' 'lg:ml-[4%] lg:mr-[6%]' 'lg:mr-[12%]' %}">
+          <div class="absolute inset-0 bg-[#FF9C00] rounded-full translate-y-1.5 translate-x-1"></div>
+          <div class="relative bg-white rounded-full border border-gray-100 flex items-center p-2 pr-5 shadow-sm">
+            
+            <div class="flex-shrink-0 w-11 h-11 bg-[#6C2CB1] rounded-full flex items-center justify-center text-white shadow-inner">
+              {% if card.icon == 'users' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              {% elif card.icon == 'video' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              {% elif card.icon == 'briefcase' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              {% elif card.icon == 'trending' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              {% elif card.icon == 'heart' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              {% elif card.icon == 'badge' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+              {% else %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              {% endif %}
+            </div>
+
+            <div class="ml-3 flex-1 min-w-0">
+              <h4 class="font-bold text-gray-900 text-[13px] md:text-[15px]">{{ card.title }}</h4>
+              <div class="flex items-start mt-0.5">
+                <span class="flex-shrink-0 text-[#FF9C00] font-bold text-xs mr-1 leading-tight">✓</span>
+                <p class="text-[11px] md:text-[13px] text-gray-700 leading-tight">{{ card.description }}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+<style>
+    /* Custom Animations */
+    @keyframes fadeInUp {
+        0% { opacity: 0; transform: translateY(40px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes floatImg {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+    
+    /* New Infinite Laser Animations */
+    @keyframes laserTop {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+    @keyframes laserRight {
+        0% { top: -100%; }
+        100% { top: 100%; }
+    }
+
+    /* Utility Classes */
+    .animate-fade-in-up {
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0; /* Hidden before animation starts */
+    }
+    .animate-gradient-flow {
+        background-size: 200% 200%;
+        animation: gradientFlow 4s ease infinite;
+    }
+    .animate-float {
+        animation: floatImg 3.5s ease-in-out infinite;
+    }
+</style>
+
+
+{% if process_section %}
+<section class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 font-sans bg-gray-50/50 rounded-3xl mt-8">
+    
+    <div class="text-center mb-16 relative z-20 animate-fade-in-up" style="animation-delay: 0.1s;">
+        <h2 class="text-2xl font-semibold text-black mb-2 tracking-tight">{{ process_section.title }}</h2>
+        <p class="text-gray-600 text-sm md:text-base font-medium max-w-2xl mx-auto">{{ process_section.subtitle }}</p>
+    </div>
+    
+    <div class="relative w-full pb-12">
+        <div class="hidden lg:block absolute top-1/2 left-10 right-10 h-1 bg-gradient-to-r from-purple-200 via-orange-300 to-purple-200 animate-gradient-flow -translate-y-1/2 z-0 blur-[2px] opacity-70"></div>
+        <div class="hidden lg:block absolute top-1/2 left-10 right-10 h-[2px] bg-gradient-to-r from-[#6C2CB1] via-[#FF9C00] to-[#6C2CB1] animate-gradient-flow -translate-y-1/2 z-0 opacity-40"></div>
+
+        <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 px-2 lg:px-6">
+            
+            {% for step in process_section.steps.all %}
+            <div class="group relative bg-[#EAE0F5] rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-purple-50 hover:border-purple-200 transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_40px_rgb(108,44,177,0.12)] overflow-hidden animate-fade-in-up {% cycle '' 'lg:translate-y-10' '' 'lg:translate-y-10' %}" style="animation-delay: 0.{{ forloop.counter|add:1 }}s;">
+                
+                <div class="absolute top-0 left-0 w-full h-1.5 overflow-hidden z-20 opacity-60 group-hover:opacity-100 transition-opacity duration-300 rounded-t-3xl">
+                    <div class="absolute top-0 w-full h-full bg-gradient-to-r from-transparent via-[#FF9C00] to-[#6C2CB1]" style="animation: laserTop 1.5s linear infinite;"></div>
+                </div>
+                <div class="absolute top-0 right-0 w-1.5 h-full overflow-hidden z-20 opacity-60 group-hover:opacity-100 transition-opacity duration-300 rounded-r-3xl">
+                    <div class="absolute right-0 w-full h-full bg-gradient-to-b from-transparent via-[#FF9C00] to-[#6C2CB1]" style="animation: laserRight 1.5s linear infinite; animation-delay: 0.75s;"></div>
+                </div>
+                
+                <div class="absolute -bottom-6 -right-2 text-[130px] font-black text-gray-50 group-hover:text-purple-50/60 transition-colors duration-500 select-none z-0 leading-none tracking-tighter">{{ step.step_number }}</div>
+
+                <div class="relative z-10 w-24 h-24 mx-auto mb-8 rounded-2xl flex items-center justify-center transform transition-transform duration-500 group-hover:scale-110 shadow-inner border border-white {% cycle 'bg-gradient-to-br from-orange-50 to-purple-50 group-hover:-rotate-3' 'bg-gradient-to-br from-purple-50 to-orange-50 group-hover:rotate-3' 'bg-gradient-to-br from-orange-50 to-purple-50 group-hover:-rotate-3' 'bg-gradient-to-br from-purple-50 to-orange-50 group-hover:rotate-3' %}">
+                    {% if step.icon_image %}
+                        <img src="{{ step.icon_image.url }}" alt="{{ step.title }}" class="w-14 h-14 object-contain animate-float drop-shadow-md" style="{% cycle '' 'animation-delay: 0.5s;' 'animation-delay: 1s;' 'animation-delay: 1.5s;' %}">
+                    {% endif %}
+                </div>
+
+                <div class="relative z-10 text-center">
+                    <h3 class="text-[19px] font-extrabold text-gray-900 mb-2 group-hover:text-[#6C2CB1] transition-colors duration-300">{{ step.title }}</h3>
+                    <p class="text-gray-500 text-[14px] font-medium leading-relaxed">{{ step.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 font-sans">
+    <div class="text-center mb-12">
+        <h2 class="text-2xl font-semibold text-black mb-2 tracking-tight">Explore Our Popular Online Courses</h2>
+        <p class=" text-[15px]">Choose from our most popular industry-aligned programs</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for course in featured_courses %} 
+            <div class="course-card h-full flex flex-col border-[3.5px] border-[#6C2CB1] rounded-2xl overflow-hidden bg-white hover:shadow-xl hover:transform hover:-translate-x-2 hover:-translate-y-2 transition-all duration-300" data-category="{{ course.category }}">  
+                <div class="w-full h-40 bg-blue-50 relative">
+                    {% if course.thumbnail %}
+                    <img src="{{ course.thumbnail.url }}" alt="{{ course.coursename }}" class="w-full h-full object-cover">
+                    {% endif %}
+                </div>
+                <div class="p-4 flex flex-col flex-grow">
+                    <h3 class="text-xl font-semibold text-[#6C2CB1] line-clamp-2">
+                        {{ course.coursename }}
+                    </h3>
+                    <div class="flex flex-col  mb-2 text-[20px] text-black font-semibold">
+                            <div class="flex items-center text-[#FF9C00] ">
+                                <svg class="w-6 h-6 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                {{ course.duration }}
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-10 h-10 -mr-2 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="5 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 12l2 2 4-4"></path>
+                                </svg>
+                                <span class="text-lg font-bold leading-none tracking-tight">
+                                    {{ course.level }}
+                                </span>
+                            </div>
+                        </div>
+                    <p class="text-sm text-gray-800 mb-4 line-clamp-2">
+                        {{ course.short_description }}
+                    </p>
+                    <div class="flex items-center gap-2 justify-between mt-auto">
+                        <a href="{% url 'course_detail' course.slug %}" class="border border-[#FF9C00] text-gray-700 font-semibold text-sm px-4 md:px-8 py-2.5 rounded hover:bg-gray-50 transition-colors">
+                            View Details
+                        </a>
+
+                        {% if course.is_enrollable_online %}
+                        <button onclick="openEnrollModal('{{ course.id }}', '{{ course.coursename|escapejs }}')" class="bg-[#FF9C00] text-white font-extrabold py-1.5 px-8 rounded-md hover:bg-[#e68a00] shadow-sm transition-colors">
+                            Enroll Now
+                        </button>
+                        {% else %}
+                        <a href="{% url 'contact' %}" class="bg-[#6C2CB1] text-white font-semibold py-1.5 px-4 rounded-md hover:bg-[#5a22a0] shadow-sm transition-colors">
+                            Contact to Enroll
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center text-gray-500 col-span-3">
+                No featured courses added yet.
+            </p>
+            {% endfor %}
+    </div>
+    <div class="mt-12 text-center">
+        <a href="{% url 'courses' %}" class="inline-block border border-[#FF9C00] py-1.5 px-4 rounded hover:border-[#6C2CB1] hover:text-[#6C2CB1] transition-colors shadow-sm">
+            View All Courses
+        </a>
+    </div>
+</section>
+
+<section class="relative w-full bg-[#6C2CB1] py-4 overflow-hidden font-sans">
+    <div class="absolute top-10 left-0 w-16 h-16 bg-white/10 rounded-full -translate-x-1/2"></div>
+    <div class="absolute top-24 left-4 w-10 h-10 bg-white/10 rounded-full"></div>
+    <div class="absolute bottom-10 right-10 w-24 h-24 bg-white/10 rounded-full"></div>
+    <div class="absolute bottom-4 right-32 w-12 h-12 bg-white/10 rounded-full"></div>
+    <div class="absolute bottom-20 right-48 w-8 h-8 bg-white/10 rounded-full"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-4">
+            <h2 class="text-xl  font-semibold text-white  tracking-tight">Student Projects & Success Stories</h2>
+            <p class="text-white text-[15px]">See what our students have built and achieved</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-14 lg:px-8 items-center">
+            {% for project in projects %}
+                {% if forloop.counter == 2 %}
+                <a {% if project.project_link %}href="{{ project.project_link }}" target="_blank"{% endif %} class="block relative rounded-2xl overflow-hidden h-[300px] shadow-2xl group transform hover:-translate-y-2 transition-transform duration-300 {% if project.project_link %}cursor-pointer{% else %}cursor-default{% endif %}">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-extrabold text-lg mb-1 flex items-center gap-1.5">
+                                    {{ project.title }}
+                                    {% if project.project_link %}
+                                    <svg class="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                    {% endif %}
+                                </h3>
+                                <p class="text-gray-300 text-sm font-medium">by {{ project.student_name }}</p>
+                            </div>
+                            <span class="text-white text-sm font-semibold">{{ project.category }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% else %}
+                <a {% if project.project_link %}href="{{ project.project_link }}" target="_blank"{% endif %} class="block bg-white rounded-2xl p-4 shadow-xl flex flex-col h-[250px] transform hover:-translate-y-2 transition-transform duration-300 group {% if project.project_link %}cursor-pointer{% else %}cursor-default{% endif %}">
+                    <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-100 mb-4">
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="flex justify-between items-start px-2 mt-auto pb-2">
+                        <div>
+                            <h3 class="text-black font-semibold text-[16px] mb-0.5 flex items-center gap-1 group-hover:text-[#6C2CB1] transition-colors">
+                                {{ project.title }}
+                                {% if project.project_link %}
+                                <svg class="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6C2CB1] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                {% endif %}
+                            </h3>
+                            <p class="text-gray-600 text-sm font-medium">by {{ project.student_name }}</p>
+                        </div>
+                        <span class="text-gray-800 text-sm font-bold text-right">{{ project.category }}</span>
+                    </div>
+                </a>
+                {% endif %}
+            {% empty %}
+            <p class="text-center text-white col-span-3">No student projects added yet.</p>
+            {% endfor %}
+        </div>
+        <div class="mt-4 text-center">
+            <a href="{% url 'student_projects' %}" class="inline-flex items-center bg-[#FF9C00] text-white font-extrabold py-2 px-4 rounded-md shadow-lg hover:bg-[#e68a00] transition-colors">
+                View Showcase 
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* CSS to hide scrollbar for all sliders */
+    .story-slider::-webkit-scrollbar { display: none; }
+    .story-slider { scrollbar-width: none; -ms-overflow-style: none; }
+</style>
+
+{% for section_name, stories in grouped_stories.items %}
+<section class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-10 font-sans bg-white relative">
+    
+    <div class="mb-8 text-center sm:text-left">
+        <h2 class="text-2xl font-semibold text-black mb-2 tracking-tight">{{ section_name }}</h2>
+        <p class="text-[15px] text-gray-600 mt-1">Watch our latest {{ section_name|lower }}.</p>
+    </div>
+
+    <div class="relative w-full group">
+        
+        <button onclick="slideStories('left', 'slider-{{ forloop.counter }}')" class="absolute z-30 left-2 sm:-left-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center text-gray-800 shadow-[0_5px_15px_rgba(0,0,0,0.25)] hover:bg-[#6C2CB1] hover:text-white transition-all transform hover:scale-110 focus:outline-none">
+            <svg class="w-6 h-6 pr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+
+        <button onclick="slideStories('right', 'slider-{{ forloop.counter }}')" class="absolute z-30 right-2 sm:-right-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center text-gray-800 shadow-[0_5px_15px_rgba(0,0,0,0.25)] hover:bg-[#6C2CB1] hover:text-white transition-all transform hover:scale-110 focus:outline-none">
+            <svg class="w-6 h-6 pl-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+
+        <div id="slider-{{ forloop.counter }}" class="story-slider flex overflow-x-auto gap-4 md:gap-6 pb-8 pt-4 px-2 sm:px-4 snap-x snap-mandatory">
+            
+            {% for story in stories %}
+            <div class="relative w-[75vw] sm:w-[300px] md:w-[260px] h-[320px] flex-shrink-0 snap-center rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group bg-gray-100 select-none">
+                
+                {% if story.image %}
+                    <img src="{{ story.image.url }}" alt="{{ story.student_name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none">
+                {% endif %}
+
+                <div class="absolute inset-0 bg-gradient-to-t from-[#2a114d]/90 via-[#2a114d]/40 to-transparent opacity-90 pointer-events-none"></div>
+
+                <div class="absolute bottom-0 left-0 w-full p-5 flex justify-between items-end z-10 pointer-events-none">
+                    <div class="text-left flex-1 pr-2">
+                        <h4 class="text-white font-bold text-[17px] md:text-[18px] mb-0.5 leading-tight">{{ story.student_name }}</h4>
+                        <p class="text-gray-200 text-[12px] md:text-[13px] font-medium tracking-wide">{{ story.course_or_role }}</p>
+                    </div>
+                </div>
+
+                {% if story.video_file %}
+                <button onclick="openVideoModal('{{ story.video_file.url }}')" class="absolute bottom-5 right-4 md:right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-110 flex-shrink-0 z-20 cursor-pointer pointer-events-auto">
+                    <svg class="w-5 h-5 text-black ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                {% endif %}
+                
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</section>
+{% endfor %}
+
+
+<div id="studentVideoModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl relative w-full max-w-[450px] p-3 animate-fade-in-up">
+        <button onclick="closeVideoModal()" class="absolute -top-3 -right-3 bg-white text-black hover:text-red-500 border border-gray-200 w-8 h-8 rounded-full flex items-center justify-center shadow-md z-50 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="w-full rounded-xl overflow-hidden bg-black">
+            <video id="studentVideoPlayer" class="w-full h-auto max-h-[70vh] object-contain" controls controlsList="nodownload">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
+</div>
+
+
+{% if learning_cta %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mt-2 mb-1">
+    <div class="relative w-full rounded-3xl shadow-2xl flex flex-col sm:flex-row items-center justify-end px-6 pt-12 pb-0 sm:pt-16 sm:pb-16 sm:px-12 lg:px-20 min-h-[300px]">
+        
+        <div class="absolute inset-0 bg-[#6C2CB1] rounded-3xl overflow-hidden -z-10">
+            <div class="absolute top-6 left-1/4 w-16 h-16 bg-white/10 rounded-full"></div>
+            <div class="absolute -bottom-8 left-1/3 w-32 h-32 bg-white/10 rounded-full"></div>
+            <div class="absolute top-1/2 right-1/4 w-24 h-24 bg-white/10 rounded-full"></div>
+            <div class="absolute -top-12 -right-12 w-64 h-64 bg-white/10 rounded-full"></div>
+            <div class="absolute bottom-8 right-12 w-12 h-12 bg-white/10 rounded-full"></div>
+            <div class="absolute -bottom-24 -left-12 sm:-bottom-32 sm:left-4 lg:left-12 w-64 h-64 sm:w-80 sm:h-80 bg-white rounded-full"></div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-3/5 text-center sm:text-left relative z-20 sm:ml-auto flex flex-col items-center sm:items-start">
+            <h2 class="text-[22px] sm:text-2xl lg:text-[28px] font-bold text-white mb-4 leading-tight tracking-wide">
+                {{ learning_cta.title }}
+            </h2>
+            <p class="text-gray-100 text-[14px] md:text-[15px] font-medium mb-8 leading-relaxed max-w-lg">
+                {{ learning_cta.description }}
+            </p>
+            
+            <button onclick="sendWhatsApp()" class="inline-block bg-white text-gray-900 font-semibold text-[15px] py-3 px-6 rounded-md border border-[#FF9C00]/60 hover:border-[#FF9C00] hover:bg-gray-50 transition-all duration-300 shadow-lg transform hover:-translate-y-1">
+                {{ learning_cta.button_text }}
+            </button>
+        </div>
+
+        <div class="relative sm:absolute bottom-0 sm:left-12 lg:left-24 w-56 sm:w-64 lg:w-80 lg:h-[460px] z-10 pointer-events-none drop-shadow-2xl self-center sm:self-auto mt-10 sm:mt-0">
+            {% if learning_cta.image %}
+                <img src="{{ learning_cta.image.url }}" alt="{{ learning_cta.title }}" class="w-full lg:h-[460px] h-auto object-bottom">
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+<div id="enrollModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 font-sans transition-opacity">
+    <div class="bg-white w-full max-w-[1000px] rounded-3xl shadow-2xl relative flex flex-col max-h-[95vh] overflow-hidden">
+        
+        <button onclick="closeEnrollModal()" class="absolute top-4 right-5 text-gray-500 hover:text-red-500 transition-colors z-50">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </button>
+
+        <div class="w-full pt-4 pb-2 px-2 sm:pt-10 sm:pb-6 sm:px-10 border-b border-gray-100 flex justify-center items-center relative">
+            <div class="flex flex-col sm:flex-row items-center w-full max-w-2xl relative z-10 justify-center sm:justify-between gap-2 sm:gap-0">
+                <div id="step1-indicator" class="flex-1 text-center relative z-20 w-full sm:w-auto">
+                    <div class="bg-[#FF9C00] text-white font-bold py-1 px-1 sm:py-2.5 sm:px-6 rounded-full inline-flex items-center gap-1 sm:gap-2 shadow-md transition-all text-xs sm:text-base">
+                        Enter Details
+                        <svg id="step1-check" class="w-3 h-3 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                </div>
+                <div id="step2-indicator" class="flex-1 text-center relative z-20 w-full sm:w-auto">
+                    <div class="bg-gray-200 text-gray-600 font-bold py-1 px-2 sm:py-2.5 sm:px-6 rounded-full inline-flex items-center gap-1 sm:gap-2 transition-all text-xs sm:text-base">
+                        Confirm Details
+                        <svg id="step2-check" class="w-3 h-3 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                </div>
+                
+               <div class="absolute top-1/2 left-[25%] right-[25%] h-0.5 bg-gray-200 -z-10 -translate-y-1/2 hidden sm:block overflow-hidden">
+                    <div id="progress-line" class="h-full bg-[#22c55e] transition-all duration-500 w-0"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-6 py-2 md:px-10 min-h-[300px]">
+            
+            <form id="enrollForm" class="block">
+                {% csrf_token %}
+                <input type="hidden" id="course_id" value="">
+                
+                <h3 class="text-xl font-bold text-center mb-6">Enter Correct Details</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">First Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="first_name" placeholder="Enter your first name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Last Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="last_name" placeholder="Enter your last name" required pattern="[A-Za-z\s\.\-']+" title="Only letters and spaces allowed" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                        <input type="tel" id="phone" placeholder="10-digit mobile number" required maxlength="10" minlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter exactly 10 digits" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Email Address <span class="text-red-500">*</span></label>
+                        <input type="email" id="email" placeholder="e.g. name@example.com" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Gender <span class="text-red-500">*</span></label>
+                        <select id="gender" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <option value="">Please Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                        <input type="date" id="dob" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Address <span class="text-red-500">*</span></label>
+                        <input type="text" id="address" placeholder="Door no, Street name" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">City <span class="text-red-500">*</span></label>
+                        <input type="text" id="city" placeholder="e.g. Chennai" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">State <span class="text-red-500">*</span></label>
+                        <input type="text" id="state" placeholder="e.g. Tamil Nadu" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Pincode <span class="text-red-500">*</span></label>
+                        <input type="text" id="pincode" placeholder="6-digit pincode" required maxlength="6" minlength="6" pattern="\d{6}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" title="Please enter a valid 6-digit pincode" class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Select Course <span class="text-red-500">*</span></label>
+                        <input type="text" id="course_name" value="" readonly class="border-2 border-gray-300 bg-gray-50 rounded-md py-2 px-3 text-gray-600 focus:outline-none cursor-not-allowed">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Available Mode <span class="text-red-500">*</span></label>
+                        <select id="mode" required class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]">
+                            <option value="">Please Select</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col md:col-span-3">
+                        <label class="text-sm font-bold text-gray-800 mb-1">Message</label>
+                        <textarea id="message" rows="3" placeholder="Any additional information..." class="border-2 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-[#FF9C00]"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center pb-4">
+                    <button type="button" onclick="submitStep1()" class="bg-[#FF9C00] hover:bg-[#e68a00] text-white font-bold py-3 px-12 rounded-md shadow-md transition-colors">Submit</button>
+                </div>
+            </form>
+
+            <div id="step2Content" class="hidden">
+                <h3 class="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6">Please Confirm Your Details</h3>
+                <div class="bg-[#F3E8FF] rounded-2xl p-4 sm:p-8 max-w-full sm:max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 md:gap-x-12 text-sm sm:text-[15px] font-semibold text-gray-800">
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>First Name</span><span class="font-normal text-gray-900 break-all">: <span id="conf_first_name"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Address</span><span class="font-normal text-gray-900 break-words">: <span id="conf_address"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Last Name</span><span class="font-normal text-gray-900 break-all">: <span id="conf_last_name"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>City</span><span class="font-normal text-gray-900 break-words">: <span id="conf_city"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Phone No</span><span class="font-normal text-gray-900 break-all">: <span id="conf_phone"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>State</span><span class="font-normal text-gray-900 break-words">: <span id="conf_state"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Email Id</span><span class="font-normal text-gray-900 break-all">: <span id="conf_email"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Pincode</span><span class="font-normal text-gray-900 break-all">: <span id="conf_pincode"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Gender</span><span class="font-normal text-gray-900 break-all">: <span id="conf_gender"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Course Name</span><span class="font-normal text-gray-900 break-words">: <span id="conf_course"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Date of Birth</span><span class="font-normal text-gray-900 break-all">: <span id="conf_dob"></span></span></div>
+                        <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]"><span>Mode</span><span class="font-normal text-gray-900 break-all">: <span id="conf_mode"></span></span></div>
+                    </div>
+                </div>
+
+                <div class="mt-6 sm:mt-10 flex justify-center gap-4 sm:gap-6 pb-6">
+                    <button type="button" onclick="goToStep(1)" class="bg-white border-2 border-[#FF9C00] text-gray-800 font-bold py-2 px-6 sm:py-2.5 sm:px-8 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base">Back to Edit</button>
+                    <button type="button" id="btn-confirm-final" onclick="submitStep2()" class="bg-[#FF9C00] hover:bg-[#e68a00] text-white font-bold py-2 px-8 sm:py-2.5 sm:px-10 rounded-md shadow-md transition-colors flex items-center justify-center text-sm sm:text-base">
+                        Submit Application
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+function sendWhatsApp() {
+  let message = "Hello, I’m interested in enrolling in an IT course. Can you guide me on the best course, fees, and upcoming batches?";
+  let url = "https://wa.me/918438164827?text=" + encodeURIComponent(message);
+  window.open(url, "_blank");
+}
+</script>
+
+<script>
+    function slideStories(direction, sliderId) {
+        const container = document.getElementById(sliderId);
+        const scrollAmount = 300;
+        if (direction === 'left') {
+            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else {
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+
+    // 2. Mouse Dragging Logic (Now applies to ALL sliders automatically)
+    document.addEventListener('DOMContentLoaded', () => {
+        const sliders = document.querySelectorAll('.story-slider');
+        
+        sliders.forEach(slider => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.style.scrollSnapType = 'none'; 
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener('mouseleave', () => { isDown = false; slider.style.scrollSnapType = 'x mandatory'; });
+            slider.addEventListener('mouseup', () => { isDown = false; slider.style.scrollSnapType = 'x mandatory'; });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        });
+    });
+</script>
+
+<script>
+    const slider = document.getElementById('stories-container');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.style.scrollSnapType = 'none'; 
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => { isDown = false; slider.style.scrollSnapType = 'x mandatory'; });
+    slider.addEventListener('mouseup', () => { isDown = false; slider.style.scrollSnapType = 'x mandatory'; });
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 2;
+        slider.scrollLeft = scrollLeft - walk;
+    });
+
+    function openVideoModal(videoUrl) {
+        const modal = document.getElementById('studentVideoModal');
+        const player = document.getElementById('studentVideoPlayer');
+        player.src = videoUrl;
+        modal.classList.remove('hidden');
+        player.play().catch(error => console.log("Autoplay was blocked:", error));
+    }
+
+    function closeVideoModal() {
+        const modal = document.getElementById('studentVideoModal');
+        const player = document.getElementById('studentVideoPlayer');
+        modal.classList.add('hidden');
+        player.pause();
+        player.src = '';
+    }
+
+    document.getElementById('studentVideoModal').addEventListener('click', function(e) {
+        if (e.target === this) closeVideoModal();
+    });
+</script>
+
+<script>
+    function openEnrollModal(courseId, courseName) {
+    document.getElementById('course_id').value = courseId;
+    let courseNameInput = document.getElementById('course_name');
+    if(courseNameInput) {
+        courseNameInput.value = courseName;
+    }
+    
+    const modal = document.getElementById('enrollModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); 
+    
+    goToStep(1);
+}
+
+function closeEnrollModal() {
+    const modal = document.getElementById('enrollModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+
+    const courseId = document.getElementById('course_id').value;
+    const courseNameEl = document.getElementById('course_name');
+    const courseName = courseNameEl ? courseNameEl.value : '';
+
+    document.getElementById('enrollForm').reset();
+    document.getElementById('course_id').value = courseId;
+    if (courseNameEl) courseNameEl.value = courseName;
+}
+
+function goToStep(step) {
+    const form = document.getElementById('enrollForm');
+    const step2Content = document.getElementById('step2Content');
+    
+    form.classList.add('hidden');
+    form.classList.remove('block');
+    step2Content.classList.add('hidden');
+    step2Content.classList.remove('block');
+    
+    const activeClass = ['bg-[#FF9C00]', 'text-white'];
+    const inactiveClass = ['bg-gray-200', 'text-gray-600'];
+    const completedClass = ['bg-[#22c55e]', 'text-white'];
+
+    if(step === 1) {
+        form.classList.remove('hidden');
+        form.classList.add('block');
+        
+        document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+        document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${inactiveClass.join(' ')}`;
+        
+        document.getElementById('step1-check').classList.add('hidden');
+        document.getElementById('step2-check').classList.add('hidden');
+        document.getElementById('progress-line').style.width = '0%';
+    } 
+    else if (step === 2) {
+        step2Content.classList.remove('hidden');
+        step2Content.classList.add('block');
+        
+        document.getElementById('conf_first_name').innerText = document.getElementById('first_name').value;
+        document.getElementById('conf_last_name').innerText = document.getElementById('last_name').value;
+        document.getElementById('conf_phone').innerText = document.getElementById('phone').value;
+        document.getElementById('conf_email').innerText = document.getElementById('email').value;
+        document.getElementById('conf_gender').innerText = document.getElementById('gender').value;
+        document.getElementById('conf_dob').innerText = document.getElementById('dob').value;
+        document.getElementById('conf_address').innerText = document.getElementById('address').value;
+        document.getElementById('conf_city').innerText = document.getElementById('city').value;
+        document.getElementById('conf_state').innerText = document.getElementById('state').value;
+        document.getElementById('conf_pincode').innerText = document.getElementById('pincode').value;
+        document.getElementById('conf_mode').innerText = document.getElementById('mode').value;
+        
+        let cName = document.getElementById('course_name') ? document.getElementById('course_name').value : '';
+        document.getElementById('conf_course').innerText = cName;
+
+        document.getElementById('step1-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 transition-all ${completedClass.join(' ')}`;
+        document.getElementById('step2-indicator').querySelector('div').className = `font-bold py-2.5 px-6 rounded-full inline-flex items-center gap-2 shadow-md transition-all ${activeClass.join(' ')}`;
+        
+        document.getElementById('step1-check').classList.remove('hidden');
+        document.getElementById('step2-check').classList.add('hidden');
+        document.getElementById('progress-line').style.width = '100%';
+    }
+}
+
+function submitStep1() {
+    const form = document.getElementById('enrollForm');
+    
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const firstName = document.getElementById('first_name').value.trim();
+    const lastName = document.getElementById('last_name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const pincode = document.getElementById('pincode').value.trim();
+
+    const nameRegex = /^[A-Za-z\s\.\-']+$/;
+    if (!nameRegex.test(firstName)) { alert("Please enter a valid First Name."); return; }
+    if (!nameRegex.test(lastName)) { alert("Please enter a valid Last Name."); return; }
+
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) { alert("Please enter exactly 10 digits for your Phone Number."); return; }
+
+    const pinRegex = /^\d{6}$/;
+    if (!pinRegex.test(pincode)) { alert("Please enter exactly 6 digits for your Pincode."); return; }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) { alert("Please enter a valid Email Address."); return; }
+
+    goToStep(2);
+}
+
+function submitStep2() {
+    const btn = document.getElementById('btn-confirm-final');
+    const originalText = btn.innerHTML; // Save original text
+    
+    // Add Tailwind SVG Spinner and change text
+    btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...`;
+    btn.disabled = true;
+
+    const payload = {
+        course_id: document.getElementById('course_id').value,
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        gender: document.getElementById('gender').value,
+        dob: document.getElementById('dob').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        pincode: document.getElementById('pincode').value,
+        mode: document.getElementById('mode').value,
+        message: document.getElementById('message').value
+    };
+
+    fetch('{% url "create_enrollment" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value 
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'success') {
+            // Change button to success state visually
+            btn.innerHTML = '✅ Application Sent!';
+            btn.classList.remove('bg-[#FF9C00]', 'hover:bg-[#e68a00]');
+            btn.classList.add('bg-green-500');
+
+            // Wait a moment so the user sees the "Sent!" button, then alert and redirect
+            setTimeout(() => {
+                alert("Your application for " + document.getElementById('conf_course').innerText + " has been submitted! A confirmation email has been sent to you.");
+                window.location.href = "/"; 
+            }, 800);
+            
+        } else {
+            // Show the specific error from the backend (e.g. Email failed)
+            alert("Submission failed: " + data.message);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        alert("Network error. Please check your connection and try again.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    });
+}
+</script>
+{% endblock %}

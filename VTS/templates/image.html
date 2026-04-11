@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Learning Environment | Vetri Technology Solutions{% endblock %}
+{% block meta_description %}
+Discover the learning environment at Vetri Technology Solutions with hands-on training, Expert mentors and career support.
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen font-sans py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Our Learning Environment</h1>
+                <p class="text-gray-600 font-medium">Take a look inside Vetri Technology Solutions.</p>
+            </div>
+            
+            <button onclick="history.back()" class="inline-flex items-center justify-center bg-white border-2 border-[#EAE0F5] text-[#6C2CB1] font-bold py-2.5 px-6 rounded-md shadow-sm hover:bg-purple-50 hover:border-purple-200 transition-all">
+                <svg class="w-5 h-5 mr-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                Go Back
+            </button>
+        </div>
+
+        {% for category_name, items in grouped_env_images.items %}
+            <div class="mb-14"> 
+                <h2 class="text-2xl font-bold text-[#6C2CB1] mb-6 border-b border-gray-200 pb-2">
+                    {{ category_name }}
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {% for env in items %}
+                    
+                    <div class="rounded-2xl overflow-hidden h-64 shadow-md group relative bg-white border border-gray-100 {% if env.media_type == 'video' and env.video %}cursor-pointer{% endif %}"
+                         {% if env.media_type == 'video' and env.video %}onclick="openVideoModal('{{ env.video.url }}')"{% endif %}>
+                        
+                        {% if env.media_type == 'video' and env.video %}
+                            {% if env.image %}
+                                <img src="{{ env.image.url }}" alt="{{ env.alt_text|default:'VTS Video' }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                            {% else %}
+                                <video src="{{ env.video.url }}#t=0.1" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out" muted playsinline preload="metadata"></video>
+                            {% endif %}
+                            
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-10">
+                                <svg class="w-16 h-16 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+
+                        {% else %}
+                            <img src="{{ env.image.url }}" 
+                                alt="{{ env.alt_text|default:'VTS Learning Environment' }}" 
+                                loading="lazy"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        {% endif %}
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-end p-4 z-20">
+                            {% if env.alt_text %}
+                                <span class="text-white font-semibold text-sm drop-shadow-md">{{ env.alt_text }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        {% empty %}
+            <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <p class="text-lg font-medium">No media has been uploaded yet.</p>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<div id="videoModal" onclick="closeVideoModal()" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+    <div onclick="event.stopPropagation()" class="relative w-full max-w-5xl mx-4 transform scale-95 transition-transform duration-300" id="videoModalContent">
+        
+        <button onclick="closeVideoModal()" class="absolute -top-12 right-0 text-white hover:text-[#FF9C00] bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <div class="rounded-xl overflow-hidden shadow-2xl bg-black aspect-video flex items-center justify-center border border-white/10">
+            <video id="modalVideoPlayer" class="w-full h-full outline-none" controls controlsList="nodownload">
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openVideoModal(videoUrl) {
+        const modal = document.getElementById('videoModal');
+        const content = document.getElementById('videoModalContent');
+        const player = document.getElementById('modalVideoPlayer');
+
+        // Set the video source
+        player.src = videoUrl;
+
+        // Make visible and trigger animation
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+            
+            // Auto-play the video
+            player.play().catch(e => console.log("Autoplay blocked by browser:", e));
+        }, 10);
+    }
+
+    function closeVideoModal() {
+        const modal = document.getElementById('videoModal');
+        const content = document.getElementById('videoModalContent');
+        const player = document.getElementById('modalVideoPlayer');
+
+        // Trigger closing animation
+        modal.classList.add('opacity-0');
+        content.classList.add('scale-95');
+
+        // Wait for animation to finish, then hide and clear
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            player.pause();
+            player.src = ""; // Clear source
+        }, 300);
+    }
+</script>
+{% endblock %}
