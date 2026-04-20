@@ -7,14 +7,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --------------------------------------------------
 # BASIC SETTINGS
 # --------------------------------------------------
-SECRET_KEY = 'django-insecure-8za-6b!*&2++1m5_1t6j6lw%_zz@j_$(tgk$c46vo%brag2ues'
-DEBUG = False
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-temp-key")
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    "13.60.105.222",   # your EC2 public IP
-    "127.0.0.1",
-    "localhost",
-]
+ALLOWED_HOSTS = ["*"]
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # --------------------------------------------------
@@ -84,16 +83,17 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vtsApril',   # same as initial DB name
-        'USER': 'admin',      # RDS username
-        'PASSWORD': 'jemijeba5',   # (unga password)
-        'HOST': 'vts-db.xxxxxx.eu-north-1.rds.amazonaws.com',  # 🔥 CHANGE THIS
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }
+
 
 # --------------------------------------------------
 # PASSWORD VALIDATION
@@ -139,10 +139,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # --------------------------------------------------
 # AWS S3 MEDIA STORAGE
 # --------------------------------------------------
-AWS_ACCESS_KEY_ID = 'your-access-key'
-AWS_SECRET_ACCESS_KEY = 'your-secret-access-key'
-AWS_STORAGE_BUCKET_NAME = 'vetri-django-media'
-AWS_S3_REGION_NAME = 'eu-north-1'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'eu-north-1')
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 AWS_DEFAULT_ACL = None
@@ -167,20 +167,20 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your-gmail-app-password'
-ADMIN_EMAIL = 'your-email@gmail.com'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 
 
 # --------------------------------------------------
 # SECURITY
 # --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
-    'http://13.60.105.222',
+    "https://*.onrender.com",
 ]
 
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "SAMEORIGIN"
